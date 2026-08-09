@@ -1,83 +1,996 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Adventure Quest</title>
+<title>Adventure Quest</title>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
-      background: linear-gradient(#dff4ff, #fff3d6);
-      min-height: 100vh;
-      margin: 0;
-      padding: 30px 15px;
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background: linear-gradient(#dff4ff, #fff3d6);
+    min-height: 100vh;
+    margin: 0;
+    padding: 18px 10px 40px;
+  }
+
+  h1 {
+    margin: 8px 0 3px;
+  }
+
+  .subtitle {
+    font-size: 18px;
+    margin-bottom: 16px;
+  }
+
+  .card {
+    background: white;
+    max-width: 480px;
+    margin: 15px auto;
+    padding: 20px;
+    border-radius: 22px;
+    box-shadow: 0 4px 10px rgba(0,0,0,.12);
+  }
+
+  button {
+    font-size: 19px;
+    padding: 14px 20px;
+    margin: 7px;
+    border: none;
+    border-radius: 15px;
+    cursor: pointer;
+  }
+
+  .morning {
+    background: #ffe36e;
+  }
+
+  .tidy {
+    background: #9ee7b7;
+  }
+
+  .evening {
+    background: #b9b8ff;
+  }
+
+  .done {
+    background: #8fe39f;
+  }
+
+  .back {
+    background: #eeeeee;
+  }
+
+  /* GAME BOARD */
+
+  #boardCard {
+    max-width: 650px;
+  }
+
+  #positionMessage {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+
+  #startSpot {
+    font-size: 30px;
+    margin-bottom: 8px;
+  }
+
+  #board {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 4px;
+    max-width: 600px;
+    margin: auto;
+  }
+
+  .space {
+    aspect-ratio: 1 / 1;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 2px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    position: relative;
+    min-width: 0;
+  }
+
+  .space:nth-child(4n+1) {
+    background: #ffe5eb;
+  }
+
+  .space:nth-child(4n+2) {
+    background: #e6f4ff;
+  }
+
+  .space:nth-child(4n+3) {
+    background: #fff4c9;
+  }
+
+  .space:nth-child(4n+4) {
+    background: #e6ffe8;
+  }
+
+  .prize {
+    border: 3px solid #f0b429;
+    font-size: 17px;
+  }
+
+  .grand {
+    border: 3px solid #9b59b6;
+    font-size: 18px;
+  }
+
+  .piece {
+    font-size: 27px;
+    line-height: 1;
+  }
+
+  .spaceNumber {
+    font-size: 10px;
+    margin-top: 2px;
+  }
+
+  /* MISSIONS */
+
+  #missionScreen {
+    display: none;
+  }
+
+  #missionEmoji {
+    font-size: 65px;
+  }
+
+  #missionText {
+    font-size: 27px;
+  }
+
+  #starMessage {
+    font-size: 26px;
+    min-height: 40px;
+    font-weight: bold;
+  }
+
+  #diceArea {
+    display: none;
+    margin-top: 20px;
+  }
+
+  #diceButton {
+    font-size: 60px;
+    background: #ffd86b;
+  }
+
+  #diceResult {
+    font-size: 23px;
+    margin-top: 12px;
+    font-weight: bold;
+  }
+
+  @media (max-width: 500px) {
+    .space {
+      border-radius: 6px;
     }
 
-    h1 {
-      font-size: 38px;
-      margin-bottom: 5px;
+    .piece {
+      font-size: 21px;
     }
 
-    .subtitle {
-      font-size: 20px;
-      margin-bottom: 35px;
+    .prize, .grand {
+      font-size: 14px;
     }
 
-    .mission {
-      background: white;
-      max-width: 400px;
-      margin: 15px auto;
-      padding: 20px;
-      border-radius: 20px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+    .spaceNumber {
+      font-size: 8px;
     }
-
-    button {
-      font-size: 20px;
-      padding: 15px 25px;
-      margin: 8px;
-      border: none;
-      border-radius: 15px;
-      cursor: pointer;
-    }
-
-    .morning {
-      background: #ffe36e;
-    }
-
-    .evening {
-      background: #b9b8ff;
-    }
-
-    .tidy {
-      background: #9ee7b7;
-    }
-  </style>
+  }
+</style>
 </head>
 
 <body>
 
-  <h1>🌈 Adventure Quest</h1>
-  <div class="subtitle">Ready for your next adventure?</div>
+<h1>🌈 Adventure Quest</h1>
+<div class="subtitle">Complete missions. Earn stars. Move toward the treasure!</div>
 
-  <div class="mission">
+
+<!-- GAME BOARD -->
+
+<div class="card" id="boardCard">
+
+  <h2>🎲 Adventure Board</h2>
+
+  <div id="positionMessage"></div>
+
+  <div id="startSpot">🏠 👧</div>
+
+  <div id="board"></div>
+
+</div>
+
+
+<!-- HOME SCREEN -->
+
+<div id="homeScreen">
+
+  <div class="card">
     <h2>🌞 Morning Mission</h2>
-    <button class="morning">Start Morning Mission</button>
+
+    <button class="morning" onclick="startMorning()">
+      Start Morning Mission
+    </button>
   </div>
 
-  <div class="mission">
+
+  <div class="card">
+
     <h2>🧹 Tidy Mission</h2>
+
     <p>8-Minute Challenge</p>
-    <button class="tidy">Start Tidy Mission</button>
+
+    <button class="tidy">
+      Start Tidy Mission
+    </button>
+
   </div>
 
-  <div class="mission">
+
+  <div class="card">
+
     <h2>🌙 Evening Mission</h2>
-    <button class="evening">Start Evening Mission</button>
+
+    <button class="evening">
+      Start Evening Mission
+    </button>
+
   </div>
+
+</div>
+
+
+<!-- MORNING MISSION SCREEN -->
+
+<div id="missionScreen">
+
+  <div class="card">
+
+    <h2>🌞 Morning Mission</h2>
+
+    <div id="missionEmoji"></div>
+
+    <h2 id="missionText"></h2>
+
+    <div id="starMessage"></div>
+
+    <button
+      class="done"
+      id="doneButton"
+      onclick="completeTask()">
+      I DID IT! ⭐
+    </button>
+
+
+    <div id="diceArea">
+
+      <p>🎉 <strong>MORNING MISSION COMPLETE!</strong> 🎉</p>
+
+      <p>You earned one bonus roll!</p>
+
+      <button id="diceButton" onclick="rollDice()">
+        🎲
+      </button>
+
+      <div id="diceResult"></div>
+
+    </div>
+
+
+    <br>
+
+    <button class="back" onclick="goHome()">
+      Back to Adventure Board
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+
+/* -----------------------------
+   BOARD
+----------------------------- */
+
+const prizeSpaces = [15, 30, 45, 60, 75, 90];
+
+let boardPosition =
+  parseInt(localStorage.getItem("adventureBoardPosition")) || 0;
+
+
+function saveBoard() {
+
+  localStorage.setItem(
+    "adventureBoardPosition",
+    boardPosition
+  );
+
+}
+
+
+function buildBoard() {
+
+  const board = document.getElementById("board");
+
+  board.innerHTML = "";
+
+  /*
+    Build rows in a winding path:
+    1-10 left to right
+    11-20 right to left
+    etc.
+  */
+
+  for (let row = 0; row < 10; row++) {
+
+    let numbers = [];
+
+    let start = row * 10 + 1;
+
+    for (let i = 0; i < 10; i++) {
+      numbers.push(start + i);
+    }
+
+    if (row % 2 === 1) {
+      numbers.reverse();
+    }
+
+    numbers.forEach(number => {
+
+      let space = document.createElement("div");
+
+      space.className = "space";
+
+      space.id = "space-" + number;
+
+
+      if (prizeSpaces.includes(number)) {
+
+        space.classList.add("prize");
+
+        space.innerHTML =
+          "🎁<div class='spaceNumber'>" +
+          number +
+          "</div>";
+
+      }
+
+      else if (number === 100) {
+
+        space.classList.add("grand");
+
+        space.innerHTML =
+          "🏆<div class='spaceNumber'>100</div>";
+
+      }
+
+      else {
+
+        space.innerHTML =
+          "<div class='spaceNumber'>" +
+          number +
+          "</div>";
+
+      }
+
+
+      board.appendChild(space);
+
+    });
+
+  }
+
+  updateBoard();
+
+}
+
+
+function updateBoard() {
+
+  document.querySelectorAll(".piece")
+    .forEach(piece => piece.remove());
+
+
+  let startSpot =
+    document.getElementById("startSpot");
+
+
+  if (boardPosition === 0) {
+
+    startSpot.innerHTML = "🏠 👧";
+
+  }
+
+  else {
+
+    startSpot.innerHTML = "🏠";
+
+    let currentSpace =
+      document.getElementById(
+        "space-" + boardPosition
+      );
+
+    if (currentSpace) {
+
+      let piece =
+        document.createElement("div");
+
+      piece.className = "piece";
+
+      piece.innerHTML = "👧";
+
+      currentSpace.prepend(piece);
+
+    }
+
+  }
+
+
+  document.getElementById(
+    "positionMessage"
+  ).innerHTML =
+    "You are on space <strong>" +
+    boardPosition +
+    "</strong> of 100!";
+
+}
+
+
+function movePlayer(spaces) {
+
+  let oldPosition = boardPosition;
+
+  boardPosition += spaces;
+
+  if (boardPosition > 100) {
+    boardPosition = 100;
+  }
+
+  saveBoard();
+
+  updateBoard();
+
+  checkPrize(oldPosition, boardPosition);
+
+}
+
+
+function checkPrize(oldPosition, newPosition) {
+
+  prizeSpaces.forEach(prize => {
+
+    if (
+      oldPosition < prize &&
+      newPosition >= prize
+    ) {
+
+      setTimeout(() => {
+
+        alert(
+          "🎁 You reached prize space " +
+          prize +
+          "!"
+        );
+
+      }, 300);
+
+    }
+
+  });
+
+
+  if (
+    oldPosition < 100 &&
+    newPosition >= 100
+  ) {
+
+    setTimeout(() => {
+
+      alert(
+        "🏆 YOU REACHED THE GRAND PRIZE!"
+      );
+
+    }, 400);
+
+  }
+
+}
+
+
+/* -----------------------------
+   DAILY MORNING MISSION
+----------------------------- */
+
+function today() {
+
+  return new Date()
+    .toISOString()
+    .split("T")[0];
+
+}
+
+
+let morningData =
+  JSON.parse(
+    localStorage.getItem(
+      "adventureMorningData"
+    )
+  );
+
+
+if (
+  !morningData ||
+  morningData.date !== today()
+) {
+
+  morningData = {
+    date: today(),
+    completed: [],
+    diceRolled: false
+  };
+
+  saveMorning();
+
+}
+
+
+function saveMorning() {
+
+  localStorage.setItem(
+    "adventureMorningData",
+    JSON.stringify(morningData)
+  );
+
+}
+
+
+const tasks = {
+
+  modeh: {
+    emoji: "🙏",
+    text: "Say Modeh Ani"
+  },
+
+  negel: {
+    emoji: "💧",
+    text: "Wash Negel Vasser"
+  },
+
+  dressed: {
+    emoji: "👗",
+    text: "Get dressed"
+  },
+
+  bed: {
+    emoji: "🛏️",
+    text: "Make your bed"
+  },
+
+  teeth: {
+    emoji: "🪥",
+    text: "Brush your teeth WITH toothpaste"
+  },
+
+  dishes: {
+    emoji: "🍽️",
+    text: "Bring your breakfast dishes to the sink"
+  }
+
+};
+
+
+const middleTaskIds = [
+  "dressed",
+  "bed",
+  "teeth"
+];
+
+
+let currentTaskId = null;
+
+
+/* -----------------------------
+   START MORNING
+----------------------------- */
+
+function startMorning() {
+
+  if (morningData.date !== today()) {
+
+    morningData = {
+      date: today(),
+      completed: [],
+      diceRolled: false
+    };
+
+    saveMorning();
+
+  }
+
+
+  document.getElementById(
+    "homeScreen"
+  ).style.display = "none";
+
+
+  document.getElementById(
+    "missionScreen"
+  ).style.display = "block";
+
+
+  document.getElementById(
+    "starMessage"
+  ).innerHTML = "";
+
+
+  showNextMorningTask();
+
+}
+
+
+/* -----------------------------
+   CHOOSE NEXT TASK
+----------------------------- */
+
+function showNextMorningTask() {
+
+  document.getElementById(
+    "starMessage"
+  ).innerHTML = "";
+
+
+  /*
+    MODEH ANI FIRST
+  */
+
+  if (
+    !morningData.completed.includes(
+      "modeh"
+    )
+  ) {
+
+    showTask("modeh");
+
+    return;
+
+  }
+
+
+  /*
+    NEGEL VASSER SECOND
+    This guarantees it is done
+    before the other morning jobs.
+  */
+
+  if (
+    !morningData.completed.includes(
+      "negel"
+    )
+  ) {
+
+    showTask("negel");
+
+    return;
+
+  }
+
+
+  /*
+    RANDOM MIDDLE TASKS
+  */
+
+  let unfinishedMiddle =
+    middleTaskIds.filter(
+      id =>
+        !morningData.completed.includes(id)
+    );
+
+
+  if (unfinishedMiddle.length > 0) {
+
+    let randomIndex =
+      Math.floor(
+        Math.random() *
+        unfinishedMiddle.length
+      );
+
+
+    showTask(
+      unfinishedMiddle[randomIndex]
+    );
+
+    return;
+
+  }
+
+
+  /*
+    BREAKFAST DISHES LAST
+  */
+
+  if (
+    !morningData.completed.includes(
+      "dishes"
+    )
+  ) {
+
+    showTask("dishes");
+
+    return;
+
+  }
+
+
+  finishMorning();
+
+}
+
+
+/* -----------------------------
+   SHOW TASK
+----------------------------- */
+
+function showTask(taskId) {
+
+  currentTaskId = taskId;
+
+  const task = tasks[taskId];
+
+
+  document.getElementById(
+    "missionEmoji"
+  ).innerHTML =
+    task.emoji;
+
+
+  document.getElementById(
+    "missionText"
+  ).innerHTML =
+    task.text;
+
+
+  document.getElementById(
+    "doneButton"
+  ).style.display =
+    "inline-block";
+
+
+  document.getElementById(
+    "diceArea"
+  ).style.display =
+    "none";
+
+}
+
+
+/* -----------------------------
+   COMPLETE TASK
+----------------------------- */
+
+function completeTask() {
+
+  if (!currentTaskId) {
+    return;
+  }
+
+
+  if (
+    morningData.completed.includes(
+      currentTaskId
+    )
+  ) {
+    return;
+  }
+
+
+  morningData.completed.push(
+    currentTaskId
+  );
+
+
+  saveMorning();
+
+
+  /*
+    ONE COMPLETED TASK
+    = ONE STAR
+    = ONE BOARD SPACE
+  */
+
+  movePlayer(1);
+
+
+  document.getElementById(
+    "starMessage"
+  ).innerHTML =
+    "⭐ STAR EARNED!<br>Move 1 space!";
+
+
+  currentTaskId = null;
+
+
+  setTimeout(
+    showNextMorningTask,
+    1000
+  );
+
+}
+
+
+/* -----------------------------
+   FINISH MORNING
+----------------------------- */
+
+function finishMorning() {
+
+  currentTaskId = null;
+
+
+  document.getElementById(
+    "missionEmoji"
+  ).innerHTML =
+    "🏆";
+
+
+  document.getElementById(
+    "missionText"
+  ).innerHTML =
+    "You finished ALL your morning missions!";
+
+
+  document.getElementById(
+    "doneButton"
+  ).style.display =
+    "none";
+
+
+  /*
+    Dice appears ONLY if
+    today's roll has not been used.
+  */
+
+  if (!morningData.diceRolled) {
+
+    document.getElementById(
+      "diceArea"
+    ).style.display =
+      "block";
+
+
+    document.getElementById(
+      "diceButton"
+    ).style.display =
+      "inline-block";
+
+
+    document.getElementById(
+      "diceResult"
+    ).innerHTML =
+      "";
+
+  }
+
+  else {
+
+    document.getElementById(
+      "diceArea"
+    ).style.display =
+      "block";
+
+
+    document.getElementById(
+      "diceButton"
+    ).style.display =
+      "none";
+
+
+    document.getElementById(
+      "diceResult"
+    ).innerHTML =
+      "✅ Today's bonus roll has already been used!";
+
+  }
+
+}
+
+
+/* -----------------------------
+   DICE
+----------------------------- */
+
+function rollDice() {
+
+  if (morningData.diceRolled) {
+    return;
+  }
+
+
+  let roll =
+    Math.floor(
+      Math.random() * 6
+    ) + 1;
+
+
+  /*
+    Mark it used BEFORE moving
+    so refreshing cannot create
+    another roll.
+  */
+
+  morningData.diceRolled = true;
+
+  saveMorning();
+
+
+  movePlayer(roll);
+
+
+  document.getElementById(
+    "diceButton"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "diceResult"
+  ).innerHTML =
+    "🎉 You rolled a <strong>" +
+    roll +
+    "</strong>!<br>Your piece moved " +
+    roll +
+    " bonus spaces!";
+
+}
+
+
+/* -----------------------------
+   HOME
+----------------------------- */
+
+function goHome() {
+
+  document.getElementById(
+    "missionScreen"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "homeScreen"
+  ).style.display =
+    "block";
+
+
+  updateBoard();
+
+}
+
+
+/* BUILD BOARD WHEN PAGE LOADS */
+
+buildBoard();
+
+</script>
 
 </body>
 </html>
