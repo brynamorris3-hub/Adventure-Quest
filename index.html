@@ -335,7 +335,6 @@ Complete missions • Earn stars • Reach the castle!
     <button class="morning" onclick="startMorning()">
       Start Morning Mission
     </button>
-    <button onclick="testSound()">🔊 Test Sound</button>
   </div>
 
   <div class="card">
@@ -515,24 +514,7 @@ function tone(frequency,duration,delay=0) {
 }
 
 
-function testSound() {
-  const ctx = getAudio();
-
-  if (ctx.state === "suspended") {
-    ctx.resume().then(() => {
-      tone(523, .2, 0);
-      tone(659, .2, .18);
-      tone(784, .3, .36);
-    });
-  } else {
-    tone(523, .2, 0);
-    tone(659, .2, .18);
-    tone(784, .3, .36);
-  }
-}
-
 function starSound() {
-  function starSound() {
 
   tone(523,.18,0);
   tone(659,.18,.14);
