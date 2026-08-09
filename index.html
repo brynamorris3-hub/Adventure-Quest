@@ -7,262 +7,436 @@
 <title>Adventure Quest</title>
 
 <style>
-  * {
-    box-sizing: border-box;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 16px 10px 40px;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  min-height: 100vh;
+  background: linear-gradient(
+    #ccefff 0%,
+    #e8fbdc 48%,
+    #fff0d5 100%
+  );
+}
+
+h1 {
+  margin: 7px 0 3px;
+  font-size: 38px;
+}
+
+.subtitle {
+  font-size: 18px;
+  margin-bottom: 15px;
+}
+
+.card {
+  background: rgba(255,255,255,.95);
+  max-width: 520px;
+  margin: 15px auto;
+  padding: 20px;
+  border-radius: 24px;
+  box-shadow: 0 6px 16px rgba(0,0,0,.14);
+}
+
+button {
+  border: none;
+  border-radius: 17px;
+  padding: 14px 21px;
+  margin: 7px;
+  font-size: 19px;
+  cursor: pointer;
+  box-shadow: 0 3px 7px rgba(0,0,0,.15);
+}
+
+.morning { background: #ffe36e; }
+.tidy { background: #9ee7b7; }
+.evening { background: #b9b8ff; }
+.done { background: #8fe39f; }
+.back { background: #eeeeee; }
+
+
+/* -------------------------
+   ADVENTURE BOARD
+------------------------- */
+
+#boardCard {
+  max-width: 800px;
+  padding: 18px 8px 25px;
+  overflow: hidden;
+
+  background:
+    linear-gradient(
+      #d8f4ff 0%,
+      #e4ffd9 45%,
+      #fff1cc 100%
+    );
+}
+
+.boardScenery {
+  font-size: 27px;
+  letter-spacing: 7px;
+  margin-bottom: 4px;
+}
+
+#positionMessage {
+  font-weight: bold;
+  font-size: 19px;
+  margin: 8px 0 12px;
+}
+
+#boardScroll {
+  overflow-x: auto;
+  padding: 10px;
+}
+
+#board {
+  width: 690px;
+  margin: auto;
+  position: relative;
+}
+
+.land {
+  font-size: 18px;
+  font-weight: bold;
+  background: rgba(255,255,255,.75);
+  border-radius: 18px;
+  padding: 7px 15px;
+  width: max-content;
+  margin: 8px auto;
+}
+
+.pathRow {
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pathRow.reverse {
+  flex-direction: row-reverse;
+}
+
+.space {
+  width: 54px;
+  height: 54px;
+  flex: 0 0 54px;
+
+  border-radius: 50%;
+  border: 3px solid white;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  box-shadow:
+    0 3px 5px rgba(0,0,0,.23),
+    inset 0 2px 2px rgba(255,255,255,.45);
+
+  font-weight: bold;
+  position: relative;
+}
+
+
+/* repeating board colours */
+
+.space.color1 { background: #ff9ab0; }
+.space.color2 { background: #ffd166; }
+.space.color3 { background: #75dcb9; }
+.space.color4 { background: #78b9ff; }
+.space.color5 { background: #bd91ff; }
+.space.color6 { background: #ffad6d; }
+
+
+.spaceNumber {
+  font-size: 11px;
+}
+
+
+/* player */
+
+.piece {
+  position: absolute;
+  font-size: 31px;
+  top: -18px;
+  z-index: 10;
+
+  filter:
+    drop-shadow(0 3px 2px rgba(0,0,0,.3));
+}
+
+
+/* prize spaces */
+
+.space.prize {
+  width: 60px;
+  height: 60px;
+  flex-basis: 60px;
+
+  border: 4px solid #fff6a5;
+
+  background:
+    radial-gradient(
+      circle,
+      #fffbd1,
+      #ffd651 55%,
+      #ff9e2c
+    );
+
+  font-size: 22px;
+
+  animation: glowPrize 1.8s infinite alternate;
+}
+
+@keyframes glowPrize {
+
+  from {
+    box-shadow:
+      0 3px 8px rgba(0,0,0,.2);
   }
 
-  body {
-    font-family: Arial, sans-serif;
-    text-align: center;
-    background:
-      linear-gradient(#d9f4ff 0%, #eefbdc 48%, #fff0d7 100%);
-    min-height: 100vh;
-    margin: 0;
-    padding: 16px 10px 40px;
+  to {
+    box-shadow:
+      0 0 15px #ffd44d;
   }
+
+}
+
+
+/* grand prize */
+
+.space.grand {
+  width: 66px;
+  height: 66px;
+  flex-basis: 66px;
+
+  font-size: 25px;
+
+  background:
+    radial-gradient(
+      circle,
+      #fff48f,
+      #e591ff,
+      #8b6cff
+    );
+
+  border: 4px solid white;
+
+  animation: grandGlow 1.2s infinite alternate;
+}
+
+@keyframes grandGlow {
+
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.1);
+  }
+
+}
+
+
+/* curved connectors */
+
+.turn {
+  height: 31px;
+  position: relative;
+}
+
+.turn.right::after {
+
+  content: "↘";
+
+  position: absolute;
+  right: 42px;
+  top: -9px;
+
+  font-size: 35px;
+  color: #8b6f52;
+}
+
+.turn.left::after {
+
+  content: "↙";
+
+  position: absolute;
+  left: 42px;
+  top: -9px;
+
+  font-size: 35px;
+  color: #8b6f52;
+}
+
+
+/* start */
+
+#startSpot {
+  font-size: 30px;
+  margin: 4px 0 8px;
+}
+
+
+/* scenery between sections */
+
+.scene {
+  font-size: 24px;
+  height: 32px;
+  letter-spacing: 14px;
+}
+
+
+/* mission screens */
+
+#missionScreen {
+  display: none;
+}
+
+#missionEmoji {
+  font-size: 68px;
+}
+
+#missionText {
+  font-size: 27px;
+}
+
+#starMessage {
+  min-height: 42px;
+  font-size: 27px;
+  font-weight: bold;
+}
+
+#diceArea {
+  display: none;
+  margin-top: 18px;
+}
+
+#diceButton {
+  font-size: 65px;
+  background: #ffd86b;
+}
+
+#diceResult {
+  margin-top: 12px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+
+@media (max-width: 700px) {
 
   h1 {
-    margin: 8px 0 3px;
-    font-size: 38px;
+    font-size: 31px;
   }
-
-  .subtitle {
-    font-size: 18px;
-    margin-bottom: 14px;
-  }
-
-  .card {
-    background: rgba(255,255,255,.95);
-    max-width: 520px;
-    margin: 15px auto;
-    padding: 20px;
-    border-radius: 24px;
-    box-shadow: 0 6px 16px rgba(0,0,0,.13);
-  }
-
-  button {
-    font-size: 19px;
-    padding: 14px 20px;
-    margin: 7px;
-    border: none;
-    border-radius: 16px;
-    cursor: pointer;
-    box-shadow: 0 3px 7px rgba(0,0,0,.15);
-  }
-
-  .morning { background: #ffe36e; }
-  .tidy { background: #9ee7b7; }
-  .evening { background: #b9b8ff; }
-  .done { background: #8fe39f; }
-  .back { background: #eeeeee; }
 
   #boardCard {
-    max-width: 760px;
-    overflow: hidden;
-    background:
-      linear-gradient(#c9efff 0 28%, #c9f2b8 28% 72%, #ffe7b5 72% 100%);
-    position: relative;
+    padding-left: 4px;
+    padding-right: 4px;
   }
 
-  .sceneTop {
-    font-size: 28px;
-    margin-bottom: 4px;
-  }
+}
 
-  #positionMessage {
-    font-size: 18px;
-    font-weight: bold;
-    margin: 6px 0 12px;
-  }
-
-  #boardWrap {
-    overflow-x: auto;
-    padding: 8px 4px 12px;
-  }
-
-  #board {
-    min-width: 660px;
-    display: grid;
-    grid-template-columns: repeat(10, 1fr);
-    gap: 6px;
-    position: relative;
-  }
-
-  .space {
-    aspect-ratio: 1 / 1;
-    border-radius: 50%;
-    border: 3px solid rgba(255,255,255,.9);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    font-size: 13px;
-    position: relative;
-    box-shadow: 0 3px 6px rgba(0,0,0,.18);
-    transition: transform .25s ease;
-  }
-
-  .space:hover {
-    transform: scale(1.05);
-  }
-
-  .space:nth-child(6n+1) { background: #ff9eb5; }
-  .space:nth-child(6n+2) { background: #ffd166; }
-  .space:nth-child(6n+3) { background: #8de0c1; }
-  .space:nth-child(6n+4) { background: #8ec5ff; }
-  .space:nth-child(6n+5) { background: #c7a5ff; }
-  .space:nth-child(6n+6) { background: #ffb879; }
-
-  .prize {
-    border: 4px solid #fff4a3;
-    background: radial-gradient(circle, #fff8b8 0%, #ffc94f 65%, #f5a623 100%) !important;
-    transform: scale(1.08);
-    font-size: 19px;
-  }
-
-  .grand {
-    border: 4px solid #fff;
-    background: radial-gradient(circle, #ffed8a, #dd8cff, #7b5cff) !important;
-    transform: scale(1.18);
-    font-size: 21px;
-  }
-
-  .piece {
-    font-size: 30px;
-    line-height: 1;
-    filter: drop-shadow(0 2px 2px rgba(0,0,0,.25));
-  }
-
-  .spaceNumber {
-    font-size: 10px;
-    margin-top: 2px;
-    font-weight: bold;
-  }
-
-  .landLabel {
-    grid-column: span 10;
-    border-radius: 18px;
-    padding: 8px;
-    margin: 3px 0;
-    font-weight: bold;
-    font-size: 18px;
-    background: rgba(255,255,255,.76);
-  }
-
-  #startSpot {
-    font-size: 32px;
-    margin: 8px 0 12px;
-  }
-
-  .legend {
-    margin-top: 14px;
-    font-size: 15px;
-    line-height: 1.6;
-  }
-
-  #missionScreen {
-    display: none;
-  }
-
-  #missionEmoji {
-    font-size: 68px;
-  }
-
-  #missionText {
-    font-size: 27px;
-  }
-
-  #starMessage {
-    font-size: 27px;
-    min-height: 40px;
-    font-weight: bold;
-  }
-
-  #diceArea {
-    display: none;
-    margin-top: 20px;
-  }
-
-  #diceButton {
-    font-size: 64px;
-    background: #ffd86b;
-  }
-
-  #diceResult {
-    font-size: 23px;
-    margin-top: 12px;
-    font-weight: bold;
-  }
-
-  @media (max-width: 700px) {
-    #boardCard {
-      padding: 15px 8px;
-    }
-
-    #board {
-      min-width: 610px;
-    }
-
-    .piece {
-      font-size: 26px;
-    }
-  }
 </style>
 </head>
+
 
 <body>
 
 <h1>🌈 Adventure Quest</h1>
-<div class="subtitle">Complete missions. Earn stars. Travel to the grand prize!</div>
+
+<div class="subtitle">
+Complete missions, earn stars and travel to the treasure!
+</div>
+
+
+<!-- =========================
+     GAME BOARD
+========================= -->
 
 <div class="card" id="boardCard">
 
-  <div class="sceneTop">☁️ 🌈 ☀️ 🦋 🌳 🏰 ☁️</div>
+  <div class="boardScenery">
+    ☁️ 🌈 ☀️ 🦋 ☁️
+  </div>
 
-  <h2>🎲 Adventure Board</h2>
+  <h2>🎲 Adventure Trail</h2>
 
   <div id="positionMessage"></div>
 
-  <div id="startSpot">🏠 👧</div>
-
-  <div id="boardWrap">
-    <div id="board"></div>
+  <div id="startSpot">
+    🏠 👧 START
   </div>
 
-  <div class="legend">
-    🎁 Mini prize at 15, 30, 45, 60, 75 and 90<br>
-    🏆 Grand prize at 100
+
+  <div id="boardScroll">
+
+    <div id="board"></div>
+
   </div>
 
 </div>
 
+
+
+<!-- =========================
+     HOME
+========================= -->
 
 <div id="homeScreen">
 
   <div class="card">
+
     <h2>🌞 Morning Mission</h2>
-    <button class="morning" onclick="startMorning()">
+
+    <button
+      class="morning"
+      onclick="startMorning()">
+
       Start Morning Mission
+
     </button>
+
   </div>
 
+
   <div class="card">
+
     <h2>🧹 Tidy Mission</h2>
+
     <p>8-Minute Challenge</p>
+
     <button class="tidy">
       Start Tidy Mission
     </button>
+
   </div>
 
+
   <div class="card">
+
     <h2>🌙 Evening Mission</h2>
+
     <button class="evening">
       Start Evening Mission
     </button>
+
   </div>
 
 </div>
 
+
+
+<!-- =========================
+     MORNING
+========================= -->
 
 <div id="missionScreen">
 
@@ -276,30 +450,51 @@
 
     <div id="starMessage"></div>
 
+
     <button
       class="done"
       id="doneButton"
       onclick="completeTask()">
+
       I DID IT! ⭐
+
     </button>
+
 
     <div id="diceArea">
 
-      <p>🎉 <strong>MORNING MISSION COMPLETE!</strong> 🎉</p>
-      <p>You earned a bonus roll!</p>
+      <p>
+        🎉 <strong>
+        MORNING MISSION COMPLETE!
+        </strong> 🎉
+      </p>
 
-      <button id="diceButton" onclick="rollDice()">
+      <p>
+        You earned a BONUS ROLL!
+      </p>
+
+      <button
+        id="diceButton"
+        onclick="rollDice()">
+
         🎲
+
       </button>
 
       <div id="diceResult"></div>
 
     </div>
 
+
     <br>
 
-    <button class="back" onclick="goHome()">
+
+    <button
+      class="back"
+      onclick="goHome()">
+
       Back to Adventure Board
+
     </button>
 
   </div>
@@ -307,77 +502,201 @@
 </div>
 
 
+
 <script>
 
-const prizeSpaces = [15, 30, 45, 60, 75, 90];
+
+/* =========================
+   BOARD SETTINGS
+========================= */
+
+const prizeSpaces =
+  [15, 30, 45, 60, 75, 90];
+
 
 let boardPosition =
-  parseInt(localStorage.getItem("adventureBoardPosition")) || 0;
+  parseInt(
+    localStorage.getItem(
+      "adventureBoardPosition"
+    )
+  ) || 0;
+
 
 
 function saveBoard() {
-  localStorage.setItem("adventureBoardPosition", boardPosition);
+
+  localStorage.setItem(
+    "adventureBoardPosition",
+    boardPosition
+  );
+
 }
 
 
-function addLandLabel(board, text) {
-  let label = document.createElement("div");
-  label.className = "landLabel";
-  label.innerHTML = text;
-  board.appendChild(label);
-}
 
+/* =========================
+   BUILD BOARD
+========================= */
 
 function buildBoard() {
 
-  const board = document.getElementById("board");
+  const board =
+    document.getElementById("board");
+
   board.innerHTML = "";
 
-  for (let row = 0; row < 10; row++) {
 
-    if (row === 0) addLandLabel(board, "🌈 Rainbow Road");
-    if (row === 3) addLandLabel(board, "🍭 Sweet Surprise Valley");
-    if (row === 6) addLandLabel(board, "🦄 Magic Forest");
-    if (row === 9) addLandLabel(board, "🏰 Final Castle Path");
+  for (
+    let row = 0;
+    row < 10;
+    row++
+  ) {
 
-    let numbers = [];
 
-    let start = row * 10 + 1;
+    /* LAND LABELS */
 
-    for (let i = 0; i < 10; i++) {
-      numbers.push(start + i);
+
+    if (row === 0) {
+
+      addLand(
+        board,
+        "🌈 Rainbow Road"
+      );
+
     }
+
+
+    if (row === 3) {
+
+      addScene(
+        board,
+        "🍭 🍬 🍡 🍭"
+      );
+
+      addLand(
+        board,
+        "🍭 Sweet Surprise Valley"
+      );
+
+    }
+
+
+    if (row === 6) {
+
+      addScene(
+        board,
+        "🌳 🦋 🌸 🦄 🌳"
+      );
+
+      addLand(
+        board,
+        "🦄 Magic Forest"
+      );
+
+    }
+
+
+    if (row === 9) {
+
+      addScene(
+        board,
+        "✨ ⭐ 👑 ⭐ ✨"
+      );
+
+      addLand(
+        board,
+        "🏰 Final Castle Path"
+      );
+
+    }
+
+
+
+    /* ROW */
+
+    let pathRow =
+      document.createElement("div");
+
+    pathRow.className =
+      "pathRow";
+
 
     if (row % 2 === 1) {
-      numbers.reverse();
+
+      pathRow.classList.add(
+        "reverse"
+      );
+
     }
 
-    numbers.forEach(number => {
 
-      let space = document.createElement("div");
+    let start =
+      row * 10 + 1;
 
-      space.className = "space";
-      space.id = "space-" + number;
 
-      if (prizeSpaces.includes(number)) {
+    for (
+      let i = 0;
+      i < 10;
+      i++
+    ) {
 
-        space.classList.add("prize");
+      let number =
+        start + i;
+
+
+      let space =
+        document.createElement("div");
+
+
+      let colour =
+        (number - 1) % 6 + 1;
+
+
+      space.className =
+        "space color" + colour;
+
+
+      space.id =
+        "space-" + number;
+
+
+
+      /* PRIZES */
+
+
+      if (
+        prizeSpaces.includes(number)
+      ) {
+
+        space.classList.add(
+          "prize"
+        );
 
         space.innerHTML =
-          "🎁<div class='spaceNumber'>" +
+          "🎁" +
+          "<div class='spaceNumber'>" +
           number +
           "</div>";
 
       }
 
-      else if (number === 100) {
 
-        space.classList.add("grand");
+      else if (
+        number === 100
+      ) {
+
+        space.classList.add(
+          "grand"
+        );
 
         space.innerHTML =
-          "🏰🏆<div class='spaceNumber'>100</div>";
+          "🏰" +
+          "<div class='spaceNumber'>" +
+          "100" +
+          "</div>";
 
       }
+
 
       else {
 
@@ -388,324 +707,921 @@ function buildBoard() {
 
       }
 
-      board.appendChild(space);
 
-    });
+      pathRow.appendChild(
+        space
+      );
+
+    }
+
+
+    board.appendChild(
+      pathRow
+    );
+
+
+    /* CONNECTING TURN */
+
+
+    if (row < 9) {
+
+      let turn =
+        document.createElement("div");
+
+
+      turn.className =
+        "turn " +
+        (
+          row % 2 === 0
+          ? "right"
+          : "left"
+        );
+
+
+      board.appendChild(
+        turn
+      );
+
+    }
 
   }
 
+
   updateBoard();
+
 }
 
+
+
+/* =========================
+   LAND LABEL
+========================= */
+
+function addLand(
+  board,
+  text
+) {
+
+  let land =
+    document.createElement("div");
+
+  land.className =
+    "land";
+
+  land.innerHTML =
+    text;
+
+  board.appendChild(
+    land
+  );
+
+}
+
+
+
+/* =========================
+   SCENERY
+========================= */
+
+function addScene(
+  board,
+  text
+) {
+
+  let scene =
+    document.createElement("div");
+
+  scene.className =
+    "scene";
+
+  scene.innerHTML =
+    text;
+
+  board.appendChild(
+    scene
+  );
+
+}
+
+
+
+/* =========================
+   UPDATE PLAYER
+========================= */
 
 function updateBoard() {
 
-  document.querySelectorAll(".piece")
-    .forEach(piece => piece.remove());
 
-  let startSpot = document.getElementById("startSpot");
+  document
+    .querySelectorAll(".piece")
+    .forEach(
+      piece => piece.remove()
+    );
 
-  if (boardPosition === 0) {
 
-    startSpot.innerHTML = "🏠 👧";
+  let startSpot =
+    document.getElementById(
+      "startSpot"
+    );
 
-  } else {
 
-    startSpot.innerHTML = "🏠";
+  if (
+    boardPosition === 0
+  ) {
+
+    startSpot.innerHTML =
+      "🏠 👧 START";
+
+  }
+
+
+  else {
+
+    startSpot.innerHTML =
+      "🏠 START";
+
 
     let currentSpace =
-      document.getElementById("space-" + boardPosition);
+      document.getElementById(
+        "space-" +
+        boardPosition
+      );
+
 
     if (currentSpace) {
 
-      let piece = document.createElement("div");
+      let piece =
+        document.createElement(
+          "div"
+        );
 
-      piece.className = "piece";
-      piece.innerHTML = "👧";
 
-      currentSpace.prepend(piece);
+      piece.className =
+        "piece";
+
+
+      piece.innerHTML =
+        "👧";
+
+
+      currentSpace.appendChild(
+        piece
+      );
+
     }
+
   }
 
-  document.getElementById("positionMessage").innerHTML =
-    "You are on space <strong>" +
+
+  document.getElementById(
+    "positionMessage"
+  ).innerHTML =
+
+    "You are on space " +
+
+    "<strong>" +
     boardPosition +
-    "</strong> of 100!";
+    "</strong>" +
+
+    " of 100!";
+
 }
 
+
+
+/* =========================
+   MOVE PLAYER
+========================= */
 
 function movePlayer(spaces) {
 
-  let oldPosition = boardPosition;
 
-  boardPosition += spaces;
+  let oldPosition =
+    boardPosition;
 
-  if (boardPosition > 100) {
+
+  boardPosition +=
+    spaces;
+
+
+  if (
+    boardPosition > 100
+  ) {
+
     boardPosition = 100;
+
   }
+
 
   saveBoard();
+
   updateBoard();
-  checkPrize(oldPosition, boardPosition);
+
+  checkPrize(
+    oldPosition,
+    boardPosition
+  );
+
 }
 
 
-function checkPrize(oldPosition, newPosition) {
 
-  prizeSpaces.forEach(prize => {
+/* =========================
+   PRIZES
+========================= */
 
-    if (oldPosition < prize && newPosition >= prize) {
+function checkPrize(
+  oldPosition,
+  newPosition
+) {
 
-      setTimeout(() => {
-        alert("🎁 You reached prize space " + prize + "!");
-      }, 300);
+
+  prizeSpaces.forEach(
+    prize => {
+
+
+      if (
+
+        oldPosition < prize
+        &&
+        newPosition >= prize
+
+      ) {
+
+
+        setTimeout(
+          () => {
+
+            alert(
+              "🎁 YOU REACHED A PRIZE! 🎉\n\n" +
+              "Prize checkpoint " +
+              prize
+            );
+
+          },
+          300
+        );
+
+      }
 
     }
-  });
+  );
 
-  if (oldPosition < 100 && newPosition >= 100) {
 
-    setTimeout(() => {
-      alert("🏆 YOU REACHED THE GRAND PRIZE!");
-    }, 400);
+  if (
+
+    oldPosition < 100
+    &&
+    newPosition >= 100
+
+  ) {
+
+
+    setTimeout(
+      () => {
+
+        alert(
+          "🏰✨ YOU MADE IT TO THE CASTLE! ✨🏰\n\n" +
+          "YOU EARNED THE GRAND PRIZE!"
+        );
+
+      },
+      500
+    );
+
   }
+
 }
 
+
+
+/* =========================
+   TODAY
+========================= */
 
 function today() {
-  return new Date().toISOString().split("T")[0];
+
+  return new Date()
+    .toISOString()
+    .split("T")[0];
+
 }
 
+
+
+/* =========================
+   MORNING SAVE DATA
+========================= */
 
 let morningData =
-  JSON.parse(localStorage.getItem("adventureMorningData"));
+  JSON.parse(
+
+    localStorage.getItem(
+      "adventureMorningData"
+    )
+
+  );
 
 
-if (!morningData || morningData.date !== today()) {
+if (
+
+  !morningData
+  ||
+  morningData.date !== today()
+
+) {
+
 
   morningData = {
+
     date: today(),
+
     completed: [],
+
     diceRolled: false
+
   };
 
+
   saveMorning();
+
 }
+
 
 
 function saveMorning() {
+
   localStorage.setItem(
+
     "adventureMorningData",
-    JSON.stringify(morningData)
+
+    JSON.stringify(
+      morningData
+    )
+
   );
+
 }
 
 
+
+/* =========================
+   MORNING TASKS
+========================= */
+
 const tasks = {
 
+
   modeh: {
+
     emoji: "🙏",
-    text: "Say Modeh Ani"
+
+    text:
+      "Say Modeh Ani"
+
   },
+
 
   negel: {
+
     emoji: "💧",
-    text: "Wash Negel Vasser"
+
+    text:
+      "Wash Negel Vasser"
+
   },
+
 
   dressed: {
+
     emoji: "👗",
-    text: "Get dressed"
+
+    text:
+      "Get dressed"
+
   },
+
 
   bed: {
+
     emoji: "🛏️",
-    text: "Make your bed"
+
+    text:
+      "Make your bed"
+
   },
+
 
   teeth: {
+
     emoji: "🪥",
-    text: "Brush your teeth WITH toothpaste"
+
+    text:
+      "Brush your teeth WITH toothpaste"
+
   },
 
+
   dishes: {
+
     emoji: "🍽️",
-    text: "Bring your breakfast dishes to the sink"
+
+    text:
+      "Bring your breakfast dishes to the sink"
+
   }
 
 };
 
 
+
 const middleTaskIds = [
+
   "dressed",
+
   "bed",
+
   "teeth"
+
 ];
 
 
-let currentTaskId = null;
+let currentTaskId =
+  null;
 
+
+
+/* =========================
+   START MORNING
+========================= */
 
 function startMorning() {
 
-  if (morningData.date !== today()) {
+
+  if (
+
+    morningData.date !==
+    today()
+
+  ) {
+
 
     morningData = {
+
       date: today(),
+
       completed: [],
+
       diceRolled: false
+
     };
 
+
     saveMorning();
+
   }
 
-  document.getElementById("homeScreen").style.display = "none";
-  document.getElementById("missionScreen").style.display = "block";
-  document.getElementById("starMessage").innerHTML = "";
+
+  document.getElementById(
+    "homeScreen"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "missionScreen"
+  ).style.display =
+    "block";
+
+
+  document.getElementById(
+    "starMessage"
+  ).innerHTML =
+    "";
+
 
   showNextMorningTask();
+
 }
 
+
+
+/* =========================
+   NEXT MORNING TASK
+========================= */
 
 function showNextMorningTask() {
 
-  document.getElementById("starMessage").innerHTML = "";
 
-  if (!morningData.completed.includes("modeh")) {
-    showTask("modeh");
-    return;
-  }
+  document.getElementById(
+    "starMessage"
+  ).innerHTML =
+    "";
 
-  if (!morningData.completed.includes("negel")) {
-    showTask("negel");
-    return;
-  }
 
-  let unfinishedMiddle =
-    middleTaskIds.filter(
-      id => !morningData.completed.includes(id)
+  /* MODEH ANI FIRST */
+
+
+  if (
+
+    !morningData.completed
+      .includes("modeh")
+
+  ) {
+
+
+    showTask(
+      "modeh"
     );
 
-  if (unfinishedMiddle.length > 0) {
+    return;
+
+  }
+
+
+
+  /* NEGEL VASSER SECOND */
+
+
+  if (
+
+    !morningData.completed
+      .includes("negel")
+
+  ) {
+
+
+    showTask(
+      "negel"
+    );
+
+    return;
+
+  }
+
+
+
+  /* RANDOM MIDDLE TASKS */
+
+
+  let unfinishedMiddle =
+
+    middleTaskIds.filter(
+
+      id =>
+
+        !morningData
+          .completed
+          .includes(id)
+
+    );
+
+
+  if (
+    unfinishedMiddle.length > 0
+  ) {
+
 
     let randomIndex =
-      Math.floor(Math.random() * unfinishedMiddle.length);
 
-    showTask(unfinishedMiddle[randomIndex]);
+      Math.floor(
+
+        Math.random()
+        *
+        unfinishedMiddle.length
+
+      );
+
+
+    showTask(
+
+      unfinishedMiddle[
+        randomIndex
+      ]
+
+    );
+
+
     return;
+
   }
 
-  if (!morningData.completed.includes("dishes")) {
-    showTask("dishes");
+
+
+  /* BREAKFAST DISHES */
+
+
+  if (
+
+    !morningData.completed
+      .includes("dishes")
+
+  ) {
+
+
+    showTask(
+      "dishes"
+    );
+
     return;
+
   }
+
+
 
   finishMorning();
+
 }
 
 
-function showTask(taskId) {
 
-  currentTaskId = taskId;
+/* =========================
+   SHOW TASK
+========================= */
 
-  const task = tasks[taskId];
+function showTask(
+  taskId
+) {
 
-  document.getElementById("missionEmoji").innerHTML = task.emoji;
-  document.getElementById("missionText").innerHTML = task.text;
 
-  document.getElementById("doneButton").style.display = "inline-block";
-  document.getElementById("diceArea").style.display = "none";
+  currentTaskId =
+    taskId;
+
+
+  const task =
+    tasks[taskId];
+
+
+  document.getElementById(
+    "missionEmoji"
+  ).innerHTML =
+    task.emoji;
+
+
+  document.getElementById(
+    "missionText"
+  ).innerHTML =
+    task.text;
+
+
+  document.getElementById(
+    "doneButton"
+  ).style.display =
+    "inline-block";
+
+
+  document.getElementById(
+    "diceArea"
+  ).style.display =
+    "none";
+
 }
 
+
+
+/* =========================
+   COMPLETE TASK
+========================= */
 
 function completeTask() {
 
-  if (!currentTaskId) {
+
+  if (
+    !currentTaskId
+  ) {
+
     return;
+
   }
 
-  if (morningData.completed.includes(currentTaskId)) {
+
+  if (
+
+    morningData.completed
+      .includes(
+        currentTaskId
+      )
+
+  ) {
+
     return;
+
   }
 
-  morningData.completed.push(currentTaskId);
+
+  morningData.completed.push(
+    currentTaskId
+  );
+
 
   saveMorning();
+
+
+  /* STAR = ONE SPACE */
+
 
   movePlayer(1);
 
-  document.getElementById("starMessage").innerHTML =
-    "⭐ STAR EARNED!<br>Move 1 space!";
 
-  currentTaskId = null;
+  document.getElementById(
+    "starMessage"
+  ).innerHTML =
 
-  setTimeout(showNextMorningTask, 1000);
+    "⭐ STAR EARNED! ⭐" +
+    "<br>" +
+    "Your piece moved forward!";
+
+
+  currentTaskId =
+    null;
+
+
+  setTimeout(
+
+    showNextMorningTask,
+
+    1000
+
+  );
+
 }
 
+
+
+/* =========================
+   FINISH MORNING
+========================= */
 
 function finishMorning() {
 
-  currentTaskId = null;
 
-  document.getElementById("missionEmoji").innerHTML = "🏆";
+  currentTaskId =
+    null;
 
-  document.getElementById("missionText").innerHTML =
+
+  document.getElementById(
+    "missionEmoji"
+  ).innerHTML =
+    "🎉";
+
+
+  document.getElementById(
+    "missionText"
+  ).innerHTML =
+
     "You finished ALL your morning missions!";
 
-  document.getElementById("doneButton").style.display = "none";
 
-  if (!morningData.diceRolled) {
+  document.getElementById(
+    "doneButton"
+  ).style.display =
+    "none";
 
-    document.getElementById("diceArea").style.display = "block";
-    document.getElementById("diceButton").style.display = "inline-block";
-    document.getElementById("diceResult").innerHTML = "";
 
-  } else {
+  if (
+    !morningData.diceRolled
+  ) {
 
-    document.getElementById("diceArea").style.display = "block";
-    document.getElementById("diceButton").style.display = "none";
 
-    document.getElementById("diceResult").innerHTML =
-      "✅ Today's bonus roll has already been used!";
+    document.getElementById(
+      "diceArea"
+    ).style.display =
+      "block";
+
+
+    document.getElementById(
+      "diceButton"
+    ).style.display =
+      "inline-block";
+
+
+    document.getElementById(
+      "diceResult"
+    ).innerHTML =
+      "";
+
   }
+
+
+  else {
+
+
+    document.getElementById(
+      "diceArea"
+    ).style.display =
+      "block";
+
+
+    document.getElementById(
+      "diceButton"
+    ).style.display =
+      "none";
+
+
+    document.getElementById(
+      "diceResult"
+    ).innerHTML =
+
+      "✅ Today's bonus roll has already been used!";
+
+  }
+
 }
 
+
+
+/* =========================
+   BONUS DICE
+========================= */
 
 function rollDice() {
 
-  if (morningData.diceRolled) {
+
+  if (
+    morningData.diceRolled
+  ) {
+
     return;
+
   }
 
-  let roll = Math.floor(Math.random() * 6) + 1;
 
-  morningData.diceRolled = true;
+  let roll =
+
+    Math.floor(
+      Math.random() * 6
+    ) + 1;
+
+
+  morningData.diceRolled =
+    true;
+
 
   saveMorning();
 
-  movePlayer(roll);
 
-  document.getElementById("diceButton").style.display = "none";
+  movePlayer(
+    roll
+  );
 
-  document.getElementById("diceResult").innerHTML =
-    "🎉 You rolled a <strong>" +
+
+  document.getElementById(
+    "diceButton"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "diceResult"
+  ).innerHTML =
+
+    "🎲 You rolled a " +
+
+    "<strong>" +
     roll +
-    "</strong>!<br>Your piece moved " +
+    "</strong>!" +
+
+    "<br><br>" +
+
+    "Your game piece zoomed forward " +
+
     roll +
-    " bonus spaces!";
+
+    " extra spaces! 🎉";
+
 }
 
+
+
+/* =========================
+   HOME
+========================= */
 
 function goHome() {
 
-  document.getElementById("missionScreen").style.display = "none";
-  document.getElementById("homeScreen").style.display = "block";
+
+  document.getElementById(
+    "missionScreen"
+  ).style.display =
+    "none";
+
+
+  document.getElementById(
+    "homeScreen"
+  ).style.display =
+    "block";
+
 
   updateBoard();
+
 }
 
 
+
+/* START */
+
 buildBoard();
+
 
 </script>
 
