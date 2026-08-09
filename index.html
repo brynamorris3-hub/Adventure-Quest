@@ -14,28 +14,30 @@
   body {
     font-family: Arial, sans-serif;
     text-align: center;
-    background: linear-gradient(#dff4ff, #fff3d6);
+    background:
+      linear-gradient(#d9f4ff 0%, #eefbdc 48%, #fff0d7 100%);
     min-height: 100vh;
     margin: 0;
-    padding: 18px 10px 40px;
+    padding: 16px 10px 40px;
   }
 
   h1 {
     margin: 8px 0 3px;
+    font-size: 38px;
   }
 
   .subtitle {
     font-size: 18px;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
 
   .card {
-    background: white;
-    max-width: 480px;
+    background: rgba(255,255,255,.95);
+    max-width: 520px;
     margin: 15px auto;
     padding: 20px;
-    border-radius: 22px;
-    box-shadow: 0 4px 10px rgba(0,0,0,.12);
+    border-radius: 24px;
+    box-shadow: 0 6px 16px rgba(0,0,0,.13);
   }
 
   button {
@@ -43,113 +45,127 @@
     padding: 14px 20px;
     margin: 7px;
     border: none;
-    border-radius: 15px;
+    border-radius: 16px;
     cursor: pointer;
+    box-shadow: 0 3px 7px rgba(0,0,0,.15);
   }
 
-  .morning {
-    background: #ffe36e;
-  }
-
-  .tidy {
-    background: #9ee7b7;
-  }
-
-  .evening {
-    background: #b9b8ff;
-  }
-
-  .done {
-    background: #8fe39f;
-  }
-
-  .back {
-    background: #eeeeee;
-  }
-
-  /* GAME BOARD */
+  .morning { background: #ffe36e; }
+  .tidy { background: #9ee7b7; }
+  .evening { background: #b9b8ff; }
+  .done { background: #8fe39f; }
+  .back { background: #eeeeee; }
 
   #boardCard {
-    max-width: 650px;
+    max-width: 760px;
+    overflow: hidden;
+    background:
+      linear-gradient(#c9efff 0 28%, #c9f2b8 28% 72%, #ffe7b5 72% 100%);
+    position: relative;
+  }
+
+  .sceneTop {
+    font-size: 28px;
+    margin-bottom: 4px;
   }
 
   #positionMessage {
     font-size: 18px;
     font-weight: bold;
-    margin-bottom: 10px;
+    margin: 6px 0 12px;
   }
 
-  #startSpot {
-    font-size: 30px;
-    margin-bottom: 8px;
+  #boardWrap {
+    overflow-x: auto;
+    padding: 8px 4px 12px;
   }
 
   #board {
+    min-width: 660px;
     display: grid;
     grid-template-columns: repeat(10, 1fr);
-    gap: 4px;
-    max-width: 600px;
-    margin: auto;
+    gap: 6px;
+    position: relative;
   }
 
   .space {
     aspect-ratio: 1 / 1;
-    border-radius: 10px;
-    background: #ffffff;
-    border: 2px solid #ddd;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,.9);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    font-size: 12px;
+    font-size: 13px;
     position: relative;
-    min-width: 0;
+    box-shadow: 0 3px 6px rgba(0,0,0,.18);
+    transition: transform .25s ease;
   }
 
-  .space:nth-child(4n+1) {
-    background: #ffe5eb;
+  .space:hover {
+    transform: scale(1.05);
   }
 
-  .space:nth-child(4n+2) {
-    background: #e6f4ff;
-  }
-
-  .space:nth-child(4n+3) {
-    background: #fff4c9;
-  }
-
-  .space:nth-child(4n+4) {
-    background: #e6ffe8;
-  }
+  .space:nth-child(6n+1) { background: #ff9eb5; }
+  .space:nth-child(6n+2) { background: #ffd166; }
+  .space:nth-child(6n+3) { background: #8de0c1; }
+  .space:nth-child(6n+4) { background: #8ec5ff; }
+  .space:nth-child(6n+5) { background: #c7a5ff; }
+  .space:nth-child(6n+6) { background: #ffb879; }
 
   .prize {
-    border: 3px solid #f0b429;
-    font-size: 17px;
+    border: 4px solid #fff4a3;
+    background: radial-gradient(circle, #fff8b8 0%, #ffc94f 65%, #f5a623 100%) !important;
+    transform: scale(1.08);
+    font-size: 19px;
   }
 
   .grand {
-    border: 3px solid #9b59b6;
-    font-size: 18px;
+    border: 4px solid #fff;
+    background: radial-gradient(circle, #ffed8a, #dd8cff, #7b5cff) !important;
+    transform: scale(1.18);
+    font-size: 21px;
   }
 
   .piece {
-    font-size: 27px;
+    font-size: 30px;
     line-height: 1;
+    filter: drop-shadow(0 2px 2px rgba(0,0,0,.25));
   }
 
   .spaceNumber {
     font-size: 10px;
     margin-top: 2px;
+    font-weight: bold;
   }
 
-  /* MISSIONS */
+  .landLabel {
+    grid-column: span 10;
+    border-radius: 18px;
+    padding: 8px;
+    margin: 3px 0;
+    font-weight: bold;
+    font-size: 18px;
+    background: rgba(255,255,255,.76);
+  }
+
+  #startSpot {
+    font-size: 32px;
+    margin: 8px 0 12px;
+  }
+
+  .legend {
+    margin-top: 14px;
+    font-size: 15px;
+    line-height: 1.6;
+  }
 
   #missionScreen {
     display: none;
   }
 
   #missionEmoji {
-    font-size: 65px;
+    font-size: 68px;
   }
 
   #missionText {
@@ -157,7 +173,7 @@
   }
 
   #starMessage {
-    font-size: 26px;
+    font-size: 27px;
     min-height: 40px;
     font-weight: bold;
   }
@@ -168,7 +184,7 @@
   }
 
   #diceButton {
-    font-size: 60px;
+    font-size: 64px;
     background: #ffd86b;
   }
 
@@ -178,21 +194,17 @@
     font-weight: bold;
   }
 
-  @media (max-width: 500px) {
-    .space {
-      border-radius: 6px;
+  @media (max-width: 700px) {
+    #boardCard {
+      padding: 15px 8px;
+    }
+
+    #board {
+      min-width: 610px;
     }
 
     .piece {
-      font-size: 21px;
-    }
-
-    .prize, .grand {
-      font-size: 14px;
-    }
-
-    .spaceNumber {
-      font-size: 8px;
+      font-size: 26px;
     }
   }
 </style>
@@ -201,12 +213,11 @@
 <body>
 
 <h1>🌈 Adventure Quest</h1>
-<div class="subtitle">Complete missions. Earn stars. Move toward the treasure!</div>
-
-
-<!-- GAME BOARD -->
+<div class="subtitle">Complete missions. Earn stars. Travel to the grand prize!</div>
 
 <div class="card" id="boardCard">
+
+  <div class="sceneTop">☁️ 🌈 ☀️ 🦋 🌳 🏰 ☁️</div>
 
   <h2>🎲 Adventure Board</h2>
 
@@ -214,51 +225,44 @@
 
   <div id="startSpot">🏠 👧</div>
 
-  <div id="board"></div>
+  <div id="boardWrap">
+    <div id="board"></div>
+  </div>
+
+  <div class="legend">
+    🎁 Mini prize at 15, 30, 45, 60, 75 and 90<br>
+    🏆 Grand prize at 100
+  </div>
 
 </div>
 
-
-<!-- HOME SCREEN -->
 
 <div id="homeScreen">
 
   <div class="card">
     <h2>🌞 Morning Mission</h2>
-
     <button class="morning" onclick="startMorning()">
       Start Morning Mission
     </button>
   </div>
 
-
   <div class="card">
-
     <h2>🧹 Tidy Mission</h2>
-
     <p>8-Minute Challenge</p>
-
     <button class="tidy">
       Start Tidy Mission
     </button>
-
   </div>
 
-
   <div class="card">
-
     <h2>🌙 Evening Mission</h2>
-
     <button class="evening">
       Start Evening Mission
     </button>
-
   </div>
 
 </div>
 
-
-<!-- MORNING MISSION SCREEN -->
 
 <div id="missionScreen">
 
@@ -279,12 +283,10 @@
       I DID IT! ⭐
     </button>
 
-
     <div id="diceArea">
 
       <p>🎉 <strong>MORNING MISSION COMPLETE!</strong> 🎉</p>
-
-      <p>You earned one bonus roll!</p>
+      <p>You earned a bonus roll!</p>
 
       <button id="diceButton" onclick="rollDice()">
         🎲
@@ -293,7 +295,6 @@
       <div id="diceResult"></div>
 
     </div>
-
 
     <br>
 
@@ -308,10 +309,6 @@
 
 <script>
 
-/* -----------------------------
-   BOARD
------------------------------ */
-
 const prizeSpaces = [15, 30, 45, 60, 75, 90];
 
 let boardPosition =
@@ -319,29 +316,29 @@ let boardPosition =
 
 
 function saveBoard() {
+  localStorage.setItem("adventureBoardPosition", boardPosition);
+}
 
-  localStorage.setItem(
-    "adventureBoardPosition",
-    boardPosition
-  );
 
+function addLandLabel(board, text) {
+  let label = document.createElement("div");
+  label.className = "landLabel";
+  label.innerHTML = text;
+  board.appendChild(label);
 }
 
 
 function buildBoard() {
 
   const board = document.getElementById("board");
-
   board.innerHTML = "";
 
-  /*
-    Build rows in a winding path:
-    1-10 left to right
-    11-20 right to left
-    etc.
-  */
-
   for (let row = 0; row < 10; row++) {
+
+    if (row === 0) addLandLabel(board, "🌈 Rainbow Road");
+    if (row === 3) addLandLabel(board, "🍭 Sweet Surprise Valley");
+    if (row === 6) addLandLabel(board, "🦄 Magic Forest");
+    if (row === 9) addLandLabel(board, "🏰 Final Castle Path");
 
     let numbers = [];
 
@@ -360,9 +357,7 @@ function buildBoard() {
       let space = document.createElement("div");
 
       space.className = "space";
-
       space.id = "space-" + number;
-
 
       if (prizeSpaces.includes(number)) {
 
@@ -380,7 +375,7 @@ function buildBoard() {
         space.classList.add("grand");
 
         space.innerHTML =
-          "🏆<div class='spaceNumber'>100</div>";
+          "🏰🏆<div class='spaceNumber'>100</div>";
 
       }
 
@@ -393,7 +388,6 @@ function buildBoard() {
 
       }
 
-
       board.appendChild(space);
 
     });
@@ -401,7 +395,6 @@ function buildBoard() {
   }
 
   updateBoard();
-
 }
 
 
@@ -410,49 +403,34 @@ function updateBoard() {
   document.querySelectorAll(".piece")
     .forEach(piece => piece.remove());
 
-
-  let startSpot =
-    document.getElementById("startSpot");
-
+  let startSpot = document.getElementById("startSpot");
 
   if (boardPosition === 0) {
 
     startSpot.innerHTML = "🏠 👧";
 
-  }
-
-  else {
+  } else {
 
     startSpot.innerHTML = "🏠";
 
     let currentSpace =
-      document.getElementById(
-        "space-" + boardPosition
-      );
+      document.getElementById("space-" + boardPosition);
 
     if (currentSpace) {
 
-      let piece =
-        document.createElement("div");
+      let piece = document.createElement("div");
 
       piece.className = "piece";
-
       piece.innerHTML = "👧";
 
       currentSpace.prepend(piece);
-
     }
-
   }
 
-
-  document.getElementById(
-    "positionMessage"
-  ).innerHTML =
+  document.getElementById("positionMessage").innerHTML =
     "You are on space <strong>" +
     boardPosition +
     "</strong> of 100!";
-
 }
 
 
@@ -467,11 +445,8 @@ function movePlayer(spaces) {
   }
 
   saveBoard();
-
   updateBoard();
-
   checkPrize(oldPosition, boardPosition);
-
 }
 
 
@@ -479,69 +454,34 @@ function checkPrize(oldPosition, newPosition) {
 
   prizeSpaces.forEach(prize => {
 
-    if (
-      oldPosition < prize &&
-      newPosition >= prize
-    ) {
+    if (oldPosition < prize && newPosition >= prize) {
 
       setTimeout(() => {
-
-        alert(
-          "🎁 You reached prize space " +
-          prize +
-          "!"
-        );
-
+        alert("🎁 You reached prize space " + prize + "!");
       }, 300);
 
     }
-
   });
 
-
-  if (
-    oldPosition < 100 &&
-    newPosition >= 100
-  ) {
+  if (oldPosition < 100 && newPosition >= 100) {
 
     setTimeout(() => {
-
-      alert(
-        "🏆 YOU REACHED THE GRAND PRIZE!"
-      );
-
+      alert("🏆 YOU REACHED THE GRAND PRIZE!");
     }, 400);
-
   }
-
 }
 
 
-/* -----------------------------
-   DAILY MORNING MISSION
------------------------------ */
-
 function today() {
-
-  return new Date()
-    .toISOString()
-    .split("T")[0];
-
+  return new Date().toISOString().split("T")[0];
 }
 
 
 let morningData =
-  JSON.parse(
-    localStorage.getItem(
-      "adventureMorningData"
-    )
-  );
+  JSON.parse(localStorage.getItem("adventureMorningData"));
 
 
-if (
-  !morningData ||
-  morningData.date !== today()
-) {
+if (!morningData || morningData.date !== today()) {
 
   morningData = {
     date: today(),
@@ -550,17 +490,14 @@ if (
   };
 
   saveMorning();
-
 }
 
 
 function saveMorning() {
-
   localStorage.setItem(
     "adventureMorningData",
     JSON.stringify(morningData)
   );
-
 }
 
 
@@ -609,10 +546,6 @@ const middleTaskIds = [
 let currentTaskId = null;
 
 
-/* -----------------------------
-   START MORNING
------------------------------ */
-
 function startMorning() {
 
   if (morningData.date !== today()) {
@@ -624,131 +557,52 @@ function startMorning() {
     };
 
     saveMorning();
-
   }
 
-
-  document.getElementById(
-    "homeScreen"
-  ).style.display = "none";
-
-
-  document.getElementById(
-    "missionScreen"
-  ).style.display = "block";
-
-
-  document.getElementById(
-    "starMessage"
-  ).innerHTML = "";
-
+  document.getElementById("homeScreen").style.display = "none";
+  document.getElementById("missionScreen").style.display = "block";
+  document.getElementById("starMessage").innerHTML = "";
 
   showNextMorningTask();
-
 }
 
 
-/* -----------------------------
-   CHOOSE NEXT TASK
------------------------------ */
-
 function showNextMorningTask() {
 
-  document.getElementById(
-    "starMessage"
-  ).innerHTML = "";
+  document.getElementById("starMessage").innerHTML = "";
 
-
-  /*
-    MODEH ANI FIRST
-  */
-
-  if (
-    !morningData.completed.includes(
-      "modeh"
-    )
-  ) {
-
+  if (!morningData.completed.includes("modeh")) {
     showTask("modeh");
-
     return;
-
   }
 
-
-  /*
-    NEGEL VASSER SECOND
-    This guarantees it is done
-    before the other morning jobs.
-  */
-
-  if (
-    !morningData.completed.includes(
-      "negel"
-    )
-  ) {
-
+  if (!morningData.completed.includes("negel")) {
     showTask("negel");
-
     return;
-
   }
-
-
-  /*
-    RANDOM MIDDLE TASKS
-  */
 
   let unfinishedMiddle =
     middleTaskIds.filter(
-      id =>
-        !morningData.completed.includes(id)
+      id => !morningData.completed.includes(id)
     );
-
 
   if (unfinishedMiddle.length > 0) {
 
     let randomIndex =
-      Math.floor(
-        Math.random() *
-        unfinishedMiddle.length
-      );
+      Math.floor(Math.random() * unfinishedMiddle.length);
 
-
-    showTask(
-      unfinishedMiddle[randomIndex]
-    );
-
+    showTask(unfinishedMiddle[randomIndex]);
     return;
-
   }
 
-
-  /*
-    BREAKFAST DISHES LAST
-  */
-
-  if (
-    !morningData.completed.includes(
-      "dishes"
-    )
-  ) {
-
+  if (!morningData.completed.includes("dishes")) {
     showTask("dishes");
-
     return;
-
   }
-
 
   finishMorning();
-
 }
 
-
-/* -----------------------------
-   SHOW TASK
------------------------------ */
 
 function showTask(taskId) {
 
@@ -756,36 +610,13 @@ function showTask(taskId) {
 
   const task = tasks[taskId];
 
+  document.getElementById("missionEmoji").innerHTML = task.emoji;
+  document.getElementById("missionText").innerHTML = task.text;
 
-  document.getElementById(
-    "missionEmoji"
-  ).innerHTML =
-    task.emoji;
-
-
-  document.getElementById(
-    "missionText"
-  ).innerHTML =
-    task.text;
-
-
-  document.getElementById(
-    "doneButton"
-  ).style.display =
-    "inline-block";
-
-
-  document.getElementById(
-    "diceArea"
-  ).style.display =
-    "none";
-
+  document.getElementById("doneButton").style.display = "inline-block";
+  document.getElementById("diceArea").style.display = "none";
 }
 
-
-/* -----------------------------
-   COMPLETE TASK
------------------------------ */
 
 function completeTask() {
 
@@ -793,130 +624,52 @@ function completeTask() {
     return;
   }
 
-
-  if (
-    morningData.completed.includes(
-      currentTaskId
-    )
-  ) {
+  if (morningData.completed.includes(currentTaskId)) {
     return;
   }
 
-
-  morningData.completed.push(
-    currentTaskId
-  );
-
+  morningData.completed.push(currentTaskId);
 
   saveMorning();
 
-
-  /*
-    ONE COMPLETED TASK
-    = ONE STAR
-    = ONE BOARD SPACE
-  */
-
   movePlayer(1);
 
-
-  document.getElementById(
-    "starMessage"
-  ).innerHTML =
+  document.getElementById("starMessage").innerHTML =
     "⭐ STAR EARNED!<br>Move 1 space!";
-
 
   currentTaskId = null;
 
-
-  setTimeout(
-    showNextMorningTask,
-    1000
-  );
-
+  setTimeout(showNextMorningTask, 1000);
 }
 
-
-/* -----------------------------
-   FINISH MORNING
------------------------------ */
 
 function finishMorning() {
 
   currentTaskId = null;
 
+  document.getElementById("missionEmoji").innerHTML = "🏆";
 
-  document.getElementById(
-    "missionEmoji"
-  ).innerHTML =
-    "🏆";
-
-
-  document.getElementById(
-    "missionText"
-  ).innerHTML =
+  document.getElementById("missionText").innerHTML =
     "You finished ALL your morning missions!";
 
-
-  document.getElementById(
-    "doneButton"
-  ).style.display =
-    "none";
-
-
-  /*
-    Dice appears ONLY if
-    today's roll has not been used.
-  */
+  document.getElementById("doneButton").style.display = "none";
 
   if (!morningData.diceRolled) {
 
-    document.getElementById(
-      "diceArea"
-    ).style.display =
-      "block";
+    document.getElementById("diceArea").style.display = "block";
+    document.getElementById("diceButton").style.display = "inline-block";
+    document.getElementById("diceResult").innerHTML = "";
 
+  } else {
 
-    document.getElementById(
-      "diceButton"
-    ).style.display =
-      "inline-block";
+    document.getElementById("diceArea").style.display = "block";
+    document.getElementById("diceButton").style.display = "none";
 
-
-    document.getElementById(
-      "diceResult"
-    ).innerHTML =
-      "";
-
-  }
-
-  else {
-
-    document.getElementById(
-      "diceArea"
-    ).style.display =
-      "block";
-
-
-    document.getElementById(
-      "diceButton"
-    ).style.display =
-      "none";
-
-
-    document.getElementById(
-      "diceResult"
-    ).innerHTML =
+    document.getElementById("diceResult").innerHTML =
       "✅ Today's bonus roll has already been used!";
-
   }
-
 }
 
-
-/* -----------------------------
-   DICE
------------------------------ */
 
 function rollDice() {
 
@@ -924,69 +677,33 @@ function rollDice() {
     return;
   }
 
-
-  let roll =
-    Math.floor(
-      Math.random() * 6
-    ) + 1;
-
-
-  /*
-    Mark it used BEFORE moving
-    so refreshing cannot create
-    another roll.
-  */
+  let roll = Math.floor(Math.random() * 6) + 1;
 
   morningData.diceRolled = true;
 
   saveMorning();
 
-
   movePlayer(roll);
 
+  document.getElementById("diceButton").style.display = "none";
 
-  document.getElementById(
-    "diceButton"
-  ).style.display =
-    "none";
-
-
-  document.getElementById(
-    "diceResult"
-  ).innerHTML =
+  document.getElementById("diceResult").innerHTML =
     "🎉 You rolled a <strong>" +
     roll +
     "</strong>!<br>Your piece moved " +
     roll +
     " bonus spaces!";
-
 }
 
-
-/* -----------------------------
-   HOME
------------------------------ */
 
 function goHome() {
 
-  document.getElementById(
-    "missionScreen"
-  ).style.display =
-    "none";
-
-
-  document.getElementById(
-    "homeScreen"
-  ).style.display =
-    "block";
-
+  document.getElementById("missionScreen").style.display = "none";
+  document.getElementById("homeScreen").style.display = "block";
 
   updateBoard();
-
 }
 
-
-/* BUILD BOARD WHEN PAGE LOADS */
 
 buildBoard();
 
