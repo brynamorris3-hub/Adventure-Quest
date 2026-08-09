@@ -3,51 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Adventure Quest</title>
 
 <style>
-
-* {
-  box-sizing: border-box;
-}
+* { box-sizing: border-box; }
 
 body {
   margin: 0;
-  padding: 16px 10px 40px;
+  padding: 14px 10px 40px;
   font-family: Arial, sans-serif;
   text-align: center;
   min-height: 100vh;
-  background: linear-gradient(
-    #ccefff 0%,
-    #e8fbdc 48%,
-    #fff0d5 100%
-  );
+  background: linear-gradient(#ccefff, #efffdf 55%, #fff0d1);
 }
 
 h1 {
-  margin: 7px 0 3px;
-  font-size: 38px;
+  margin: 7px 0 2px;
+  font-size: 36px;
 }
 
 .subtitle {
-  font-size: 18px;
-  margin-bottom: 15px;
+  font-size: 17px;
+  margin-bottom: 12px;
 }
 
 .card {
-  background: rgba(255,255,255,.95);
-  max-width: 520px;
+  background: rgba(255,255,255,.96);
+  max-width: 540px;
   margin: 15px auto;
   padding: 20px;
-  border-radius: 24px;
+  border-radius: 25px;
   box-shadow: 0 6px 16px rgba(0,0,0,.14);
 }
 
 button {
   border: none;
   border-radius: 17px;
-  padding: 14px 21px;
+  padding: 14px 20px;
   margin: 7px;
   font-size: 19px;
   cursor: pointer;
@@ -60,241 +52,184 @@ button {
 .done { background: #8fe39f; }
 .back { background: #eeeeee; }
 
-
-/* -------------------------
-   ADVENTURE BOARD
-------------------------- */
-
-#boardCard {
-  max-width: 800px;
-  padding: 18px 8px 25px;
-  overflow: hidden;
-
-  background:
-    linear-gradient(
-      #d8f4ff 0%,
-      #e4ffd9 45%,
-      #fff1cc 100%
-    );
+#grandPrize {
+  max-width: 540px;
+  margin: 12px auto;
+  padding: 14px;
+  border-radius: 25px;
+  background: linear-gradient(135deg,#fff29a,#e9a6ff,#9ec9ff);
+  box-shadow: 0 5px 14px rgba(0,0,0,.16);
 }
 
-.boardScenery {
-  font-size: 27px;
-  letter-spacing: 7px;
-  margin-bottom: 4px;
-}
-
-#positionMessage {
+#grandPrizeTitle {
+  font-size: 25px;
   font-weight: bold;
-  font-size: 19px;
-  margin: 8px 0 12px;
 }
 
-#boardScroll {
-  overflow-x: auto;
-  padding: 10px;
-}
-
-#board {
-  width: 690px;
-  margin: auto;
-  position: relative;
-}
-
-.land {
+#progressText {
   font-size: 18px;
   font-weight: bold;
-  background: rgba(255,255,255,.75);
-  border-radius: 18px;
-  padding: 7px 15px;
-  width: max-content;
-  margin: 8px auto;
+  margin-top: 6px;
 }
 
-.pathRow {
-  height: 62px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
+#progressBar {
+  max-width: 430px;
+  height: 20px;
+  margin: 10px auto 2px;
+  background: white;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid rgba(0,0,0,.12);
 }
 
-.pathRow.reverse {
-  flex-direction: row-reverse;
+#progressFill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg,#ff9eb5,#ffd166,#8de0c1,#8ec5ff,#c7a5ff);
+  transition: width .8s ease;
+}
+
+#closeBoardCard {
+  max-width: 650px;
+  background: linear-gradient(#dcf6ff,#e9ffdd,#fff1cb);
+}
+
+#sectionTitle {
+  font-size: 21px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+
+#closeBoard {
+  display: grid;
+  grid-template-columns: repeat(7,1fr);
+  gap: 10px;
+  max-width: 600px;
+  margin: auto;
 }
 
 .space {
-  width: 54px;
-  height: 54px;
-  flex: 0 0 54px;
-
+  aspect-ratio: 1/1;
+  min-width: 0;
   border-radius: 50%;
   border: 3px solid white;
-
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-
-  box-shadow:
-    0 3px 5px rgba(0,0,0,.23),
-    inset 0 2px 2px rgba(255,255,255,.45);
-
-  font-weight: bold;
+  align-items: center;
   position: relative;
+  font-weight: bold;
+  font-size: 15px;
+  box-shadow: 0 4px 7px rgba(0,0,0,.20);
 }
 
-
-/* repeating board colours */
-
-.space.color1 { background: #ff9ab0; }
-.space.color2 { background: #ffd166; }
-.space.color3 { background: #75dcb9; }
-.space.color4 { background: #78b9ff; }
-.space.color5 { background: #bd91ff; }
-.space.color6 { background: #ffad6d; }
-
-
-.spaceNumber {
-  font-size: 11px;
-}
-
-
-/* player */
-
-.piece {
-  position: absolute;
-  font-size: 31px;
-  top: -18px;
-  z-index: 10;
-
-  filter:
-    drop-shadow(0 3px 2px rgba(0,0,0,.3));
-}
-
-
-/* prize spaces */
+.c1 { background:#ff9eb5; }
+.c2 { background:#ffd166; }
+.c3 { background:#8de0c1; }
+.c4 { background:#8ec5ff; }
+.c5 { background:#c7a5ff; }
+.c6 { background:#ffb879; }
 
 .space.prize {
-  width: 60px;
-  height: 60px;
-  flex-basis: 60px;
-
-  border: 4px solid #fff6a5;
-
-  background:
-    radial-gradient(
-      circle,
-      #fffbd1,
-      #ffd651 55%,
-      #ff9e2c
-    );
-
-  font-size: 22px;
-
-  animation: glowPrize 1.8s infinite alternate;
+  background: radial-gradient(circle,#fffbd1,#ffd651,#ff9e2c);
+  border: 4px solid #fff5a2;
+  font-size: 21px;
 }
-
-@keyframes glowPrize {
-
-  from {
-    box-shadow:
-      0 3px 8px rgba(0,0,0,.2);
-  }
-
-  to {
-    box-shadow:
-      0 0 15px #ffd44d;
-  }
-
-}
-
-
-/* grand prize */
 
 .space.grand {
-  width: 66px;
-  height: 66px;
-  flex-basis: 66px;
-
-  font-size: 25px;
-
-  background:
-    radial-gradient(
-      circle,
-      #fff48f,
-      #e591ff,
-      #8b6cff
-    );
-
-  border: 4px solid white;
-
-  animation: grandGlow 1.2s infinite alternate;
+  background: radial-gradient(circle,#fff48f,#e591ff,#806bff);
+  font-size: 22px;
 }
 
-@keyframes grandGlow {
+.player {
+  position: absolute;
+  font-size: 33px;
+  top: -24px;
+  filter: drop-shadow(0 3px 2px rgba(0,0,0,.35));
+  z-index: 5;
+}
 
+.current {
+  animation: pulse 1s infinite alternate;
+}
+
+@keyframes pulse {
   from {
     transform: scale(1);
+    box-shadow: 0 3px 7px rgba(0,0,0,.2);
   }
-
   to {
-    transform: scale(1.1);
+    transform: scale(1.15);
+    box-shadow: 0 0 18px #fff34d;
   }
-
 }
 
+#encouragement {
+  min-height: 52px;
+  font-size: 28px;
+  font-weight: bold;
+  margin: 14px 0 4px;
+}
 
-/* curved connectors */
+#fullBoardOverlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: linear-gradient(#ccefff,#eaffd9,#fff0d1);
+  overflow-y: auto;
+  padding: 18px 10px 35px;
+}
 
-.turn {
-  height: 31px;
+#fullBoardOverlay h2 {
+  font-size: 28px;
+}
+
+#fullMessage {
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 14px;
+}
+
+#fullBoard {
+  display: grid;
+  grid-template-columns: repeat(10,1fr);
+  gap: 5px;
+  max-width: 650px;
+  margin: auto;
+}
+
+.fullSpace {
+  aspect-ratio: 1/1;
+  border-radius: 50%;
+  border: 2px solid white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 11px;
+  font-weight: bold;
   position: relative;
+  box-shadow: 0 2px 4px rgba(0,0,0,.16);
 }
 
-.turn.right::after {
+.fullCurrent {
+  animation: bigGlow .45s infinite alternate;
+  border: 4px solid #fff600;
+  z-index: 3;
+}
 
-  content: "↘";
+@keyframes bigGlow {
+  from { transform: scale(1.05); }
+  to {
+    transform: scale(1.28);
+    box-shadow: 0 0 22px #fff600;
+  }
+}
 
+.fullPlayer {
   position: absolute;
-  right: 42px;
-  top: -9px;
-
-  font-size: 35px;
-  color: #8b6f52;
+  font-size: 22px;
+  top: -13px;
 }
-
-.turn.left::after {
-
-  content: "↙";
-
-  position: absolute;
-  left: 42px;
-  top: -9px;
-
-  font-size: 35px;
-  color: #8b6f52;
-}
-
-
-/* start */
-
-#startSpot {
-  font-size: 30px;
-  margin: 4px 0 8px;
-}
-
-
-/* scenery between sections */
-
-.scene {
-  font-size: 24px;
-  height: 32px;
-  letter-spacing: 14px;
-}
-
-
-/* mission screens */
 
 #missionScreen {
   display: none;
@@ -309,8 +244,8 @@ button {
 }
 
 #starMessage {
-  min-height: 42px;
-  font-size: 27px;
+  min-height: 45px;
+  font-size: 26px;
   font-weight: bold;
 }
 
@@ -325,118 +260,101 @@ button {
 }
 
 #diceResult {
-  margin-top: 12px;
   font-size: 22px;
   font-weight: bold;
+  margin-top: 12px;
 }
 
-
-@media (max-width: 700px) {
-
-  h1 {
-    font-size: 31px;
+@media(max-width:600px) {
+  #closeBoard {
+    gap: 6px;
   }
 
-  #boardCard {
-    padding-left: 4px;
-    padding-right: 4px;
+  .space {
+    font-size: 12px;
   }
 
+  .player {
+    font-size: 27px;
+  }
+
+  #fullBoard {
+    gap: 3px;
+  }
+
+  .fullSpace {
+    font-size: 9px;
+  }
 }
-
 </style>
 </head>
-
 
 <body>
 
 <h1>🌈 Adventure Quest</h1>
 
 <div class="subtitle">
-Complete missions, earn stars and travel to the treasure!
+Complete missions • Earn stars • Reach the castle!
 </div>
 
+<div id="grandPrize">
 
-<!-- =========================
-     GAME BOARD
-========================= -->
-
-<div class="card" id="boardCard">
-
-  <div class="boardScenery">
-    ☁️ 🌈 ☀️ 🦋 ☁️
+  <div id="grandPrizeTitle">
+    🏰✨ GRAND PRIZE ✨🏆
   </div>
 
-  <h2>🎲 Adventure Trail</h2>
-
-  <div id="positionMessage"></div>
-
-  <div id="startSpot">
-    🏠 👧 START
+  <div>
+    Reach SPACE 100!
   </div>
 
-
-  <div id="boardScroll">
-
-    <div id="board"></div>
-
+  <div id="progressBar">
+    <div id="progressFill"></div>
   </div>
+
+  <div id="progressText"></div>
 
 </div>
 
+<div class="card" id="closeBoardCard">
 
+  <h2>🎲 Your Adventure</h2>
 
-<!-- =========================
-     HOME
-========================= -->
+  <div id="sectionTitle"></div>
+
+  <div id="closeBoard"></div>
+
+  <div id="encouragement"></div>
+
+</div>
 
 <div id="homeScreen">
 
   <div class="card">
-
     <h2>🌞 Morning Mission</h2>
 
-    <button
-      class="morning"
-      onclick="startMorning()">
-
+    <button class="morning" onclick="startMorning()">
       Start Morning Mission
-
     </button>
-
   </div>
 
-
   <div class="card">
-
     <h2>🧹 Tidy Mission</h2>
-
     <p>8-Minute Challenge</p>
 
     <button class="tidy">
       Start Tidy Mission
     </button>
-
   </div>
 
-
   <div class="card">
-
     <h2>🌙 Evening Mission</h2>
 
     <button class="evening">
       Start Evening Mission
     </button>
-
   </div>
 
 </div>
-
-
-
-<!-- =========================
-     MORNING
-========================= -->
 
 <div id="missionScreen">
 
@@ -450,7 +368,6 @@ Complete missions, earn stars and travel to the treasure!
 
     <div id="starMessage"></div>
 
-
     <button
       class="done"
       id="doneButton"
@@ -460,59 +377,68 @@ Complete missions, earn stars and travel to the treasure!
 
     </button>
 
-
     <div id="diceArea">
 
       <p>
-        🎉 <strong>
-        MORNING MISSION COMPLETE!
-        </strong> 🎉
+        🎉 <strong>MORNING MISSION COMPLETE!</strong> 🎉
       </p>
 
       <p>
-        You earned a BONUS ROLL!
+        You unlocked a BONUS ROLL!
       </p>
 
-      <button
-        id="diceButton"
-        onclick="rollDice()">
-
+      <button id="diceButton" onclick="rollDice()">
         🎲
-
       </button>
 
       <div id="diceResult"></div>
 
     </div>
 
-
     <br>
 
-
-    <button
-      class="back"
-      onclick="goHome()">
-
+    <button class="back" onclick="goHome()">
       Back to Adventure Board
-
     </button>
 
   </div>
 
 </div>
 
+<div id="fullBoardOverlay">
+
+  <h2>🌈 LOOK HOW FAR YOU'VE COME! 🌈</h2>
+
+  <div id="fullMessage"></div>
+
+  <div id="fullBoard"></div>
+
+  <h2>🏰 Grand Prize at 100! 🏆</h2>
+
+</div>
 
 
 <script>
 
-
-/* =========================
-   BOARD SETTINGS
-========================= */
+/* ==============================
+   SETTINGS
+============================== */
 
 const prizeSpaces =
-  [15, 30, 45, 60, 75, 90];
+  [15,30,45,60,75,90];
 
+const encouragements = [
+  "🌟 WAY TO GO! 🌟",
+  "🎉 YOU DID IT! 🎉",
+  "⭐ SUPERSTAR! ⭐",
+  "🚀 AWESOME JOB! 🚀",
+  "🌈 KEEP GOING! 🌈",
+  "🥳 FANTASTIC! 🥳",
+  "💫 AMAZING! 💫",
+  "🏆 MISSION ACCOMPLISHED! 🏆",
+  "✨ YOU'RE ON A ROLL! ✨",
+  "🎊 WOOHOO! 🎊"
+];
 
 let boardPosition =
   parseInt(
@@ -522,6 +448,104 @@ let boardPosition =
   ) || 0;
 
 
+/* ==============================
+   SOUND
+============================== */
+
+let audioContext = null;
+
+function getAudio() {
+
+  if (!audioContext) {
+
+    audioContext =
+      new (
+        window.AudioContext ||
+        window.webkitAudioContext
+      )();
+
+  }
+
+  return audioContext;
+}
+
+
+function tone(frequency,duration,delay=0) {
+
+  try {
+
+    const ctx = getAudio();
+
+    const oscillator =
+      ctx.createOscillator();
+
+    const gain =
+      ctx.createGain();
+
+    oscillator.connect(gain);
+    gain.connect(ctx.destination);
+
+    oscillator.frequency.value =
+      frequency;
+
+    oscillator.type =
+      "sine";
+
+    gain.gain.setValueAtTime(
+      .15,
+      ctx.currentTime + delay
+    );
+
+    gain.gain.exponentialRampToValueAtTime(
+      .001,
+      ctx.currentTime + delay + duration
+    );
+
+    oscillator.start(
+      ctx.currentTime + delay
+    );
+
+    oscillator.stop(
+      ctx.currentTime + delay + duration
+    );
+
+  } catch(e) {}
+
+}
+
+
+function starSound() {
+
+  tone(523,.18,0);
+  tone(659,.18,.14);
+  tone(784,.25,.28);
+
+}
+
+
+function prizeSound() {
+
+  tone(523,.2,0);
+  tone(659,.2,.15);
+  tone(784,.2,.30);
+  tone(1046,.45,.45);
+
+}
+
+
+function diceSound() {
+
+  tone(330,.10,0);
+  tone(392,.10,.12);
+  tone(440,.10,.24);
+  tone(523,.25,.36);
+
+}
+
+
+/* ==============================
+   SAVE
+============================== */
 
 function saveBoard() {
 
@@ -533,368 +557,361 @@ function saveBoard() {
 }
 
 
+/* ==============================
+   CLOSE-UP BOARD
+============================== */
 
-/* =========================
-   BUILD BOARD
-========================= */
+function getSectionStart() {
 
-function buildBoard() {
+  if (boardPosition === 0) {
+    return 1;
+  }
+
+  return (
+    Math.floor(
+      (boardPosition - 1) / 14
+    ) * 14
+  ) + 1;
+
+}
+
+
+function buildCloseBoard() {
 
   const board =
-    document.getElementById("board");
+    document.getElementById(
+      "closeBoard"
+    );
 
   board.innerHTML = "";
 
+  let start =
+    getSectionStart();
+
+  let end =
+    Math.min(
+      start + 13,
+      100
+    );
+
+  document.getElementById(
+    "sectionTitle"
+  ).innerHTML =
+    "Spaces " +
+    start +
+    " – " +
+    end;
+
 
   for (
-    let row = 0;
-    row < 10;
-    row++
+    let number=start;
+    number<=end;
+    number++
   ) {
 
-
-    /* LAND LABELS */
-
-
-    if (row === 0) {
-
-      addLand(
-        board,
-        "🌈 Rainbow Road"
-      );
-
-    }
-
-
-    if (row === 3) {
-
-      addScene(
-        board,
-        "🍭 🍬 🍡 🍭"
-      );
-
-      addLand(
-        board,
-        "🍭 Sweet Surprise Valley"
-      );
-
-    }
-
-
-    if (row === 6) {
-
-      addScene(
-        board,
-        "🌳 🦋 🌸 🦄 🌳"
-      );
-
-      addLand(
-        board,
-        "🦄 Magic Forest"
-      );
-
-    }
-
-
-    if (row === 9) {
-
-      addScene(
-        board,
-        "✨ ⭐ 👑 ⭐ ✨"
-      );
-
-      addLand(
-        board,
-        "🏰 Final Castle Path"
-      );
-
-    }
-
-
-
-    /* ROW */
-
-    let pathRow =
+    let space =
       document.createElement("div");
 
-    pathRow.className =
-      "pathRow";
+    let colour =
+      ((number-1)%6)+1;
+
+    space.className =
+      "space c" + colour;
 
 
-    if (row % 2 === 1) {
+    if (
+      prizeSpaces.includes(number)
+    ) {
 
-      pathRow.classList.add(
-        "reverse"
+      space.classList.add(
+        "prize"
       );
+
+      space.innerHTML =
+        "🎁<small>" +
+        number +
+        "</small>";
+
+    }
+
+    else if (
+      number === 100
+    ) {
+
+      space.classList.add(
+        "grand"
+      );
+
+      space.innerHTML =
+        "🏰<small>100</small>";
+
+    }
+
+    else {
+
+      space.innerHTML =
+        number;
 
     }
 
 
-    let start =
-      row * 10 + 1;
-
-
-    for (
-      let i = 0;
-      i < 10;
-      i++
+    if (
+      number === boardPosition
     ) {
 
-      let number =
-        start + i;
+      space.classList.add(
+        "current"
+      );
 
-
-      let space =
-        document.createElement("div");
-
-
-      let colour =
-        (number - 1) % 6 + 1;
-
-
-      space.className =
-        "space color" + colour;
-
-
-      space.id =
-        "space-" + number;
-
-
-
-      /* PRIZES */
-
-
-      if (
-        prizeSpaces.includes(number)
-      ) {
-
-        space.classList.add(
-          "prize"
+      let player =
+        document.createElement(
+          "div"
         );
 
-        space.innerHTML =
-          "🎁" +
-          "<div class='spaceNumber'>" +
-          number +
-          "</div>";
+      player.className =
+        "player";
 
-      }
+      player.innerHTML =
+        "👧";
 
-
-      else if (
-        number === 100
-      ) {
-
-        space.classList.add(
-          "grand"
-        );
-
-        space.innerHTML =
-          "🏰" +
-          "<div class='spaceNumber'>" +
-          "100" +
-          "</div>";
-
-      }
-
-
-      else {
-
-        space.innerHTML =
-          "<div class='spaceNumber'>" +
-          number +
-          "</div>";
-
-      }
-
-
-      pathRow.appendChild(
-        space
+      space.appendChild(
+        player
       );
 
     }
 
 
     board.appendChild(
-      pathRow
+      space
     );
 
-
-    /* CONNECTING TURN */
-
-
-    if (row < 9) {
-
-      let turn =
-        document.createElement("div");
+  }
 
 
-      turn.className =
-        "turn " +
-        (
-          row % 2 === 0
-          ? "right"
-          : "left"
-        );
+  updateProgress();
+
+}
 
 
-      board.appendChild(
-        turn
-      );
+/* ==============================
+   PROGRESS
+============================== */
+
+function updateProgress() {
+
+  document.getElementById(
+    "progressFill"
+  ).style.width =
+    boardPosition + "%";
+
+
+  document.getElementById(
+    "progressText"
+  ).innerHTML =
+
+    "👧 Space <strong>" +
+    boardPosition +
+    "</strong> of 100 " +
+    "→ 🏰";
+
+}
+
+
+/* ==============================
+   FULL 100 BOARD
+============================== */
+
+function buildFullBoard() {
+
+  const board =
+    document.getElementById(
+      "fullBoard"
+    );
+
+  board.innerHTML = "";
+
+
+  for (
+    let number=1;
+    number<=100;
+    number++
+  ) {
+
+    let space =
+      document.createElement("div");
+
+    let colour =
+      ((number-1)%6)+1;
+
+    space.className =
+      "fullSpace c" +
+      colour;
+
+
+    if (
+      prizeSpaces.includes(number)
+    ) {
+
+      space.innerHTML =
+        "🎁";
 
     }
 
-  }
+    else if (
+      number === 100
+    ) {
+
+      space.innerHTML =
+        "🏰";
+
+    }
+
+    else {
+
+      space.innerHTML =
+        number;
+
+    }
 
 
-  updateBoard();
+    if (
+      number === boardPosition
+    ) {
 
-}
-
-
-
-/* =========================
-   LAND LABEL
-========================= */
-
-function addLand(
-  board,
-  text
-) {
-
-  let land =
-    document.createElement("div");
-
-  land.className =
-    "land";
-
-  land.innerHTML =
-    text;
-
-  board.appendChild(
-    land
-  );
-
-}
-
-
-
-/* =========================
-   SCENERY
-========================= */
-
-function addScene(
-  board,
-  text
-) {
-
-  let scene =
-    document.createElement("div");
-
-  scene.className =
-    "scene";
-
-  scene.innerHTML =
-    text;
-
-  board.appendChild(
-    scene
-  );
-
-}
-
-
-
-/* =========================
-   UPDATE PLAYER
-========================= */
-
-function updateBoard() {
-
-
-  document
-    .querySelectorAll(".piece")
-    .forEach(
-      piece => piece.remove()
-    );
-
-
-  let startSpot =
-    document.getElementById(
-      "startSpot"
-    );
-
-
-  if (
-    boardPosition === 0
-  ) {
-
-    startSpot.innerHTML =
-      "🏠 👧 START";
-
-  }
-
-
-  else {
-
-    startSpot.innerHTML =
-      "🏠 START";
-
-
-    let currentSpace =
-      document.getElementById(
-        "space-" +
-        boardPosition
+      space.classList.add(
+        "fullCurrent"
       );
 
-
-    if (currentSpace) {
-
-      let piece =
+      let player =
         document.createElement(
           "div"
         );
 
+      player.className =
+        "fullPlayer";
 
-      piece.className =
-        "piece";
-
-
-      piece.innerHTML =
+      player.innerHTML =
         "👧";
 
-
-      currentSpace.appendChild(
-        piece
+      space.appendChild(
+        player
       );
 
     }
 
+
+    board.appendChild(
+      space
+    );
+
   }
-
-
-  document.getElementById(
-    "positionMessage"
-  ).innerHTML =
-
-    "You are on space " +
-
-    "<strong>" +
-    boardPosition +
-    "</strong>" +
-
-    " of 100!";
 
 }
 
 
+/* ==============================
+   RANDOM ENCOURAGEMENT
+============================== */
 
-/* =========================
-   MOVE PLAYER
-========================= */
+function randomEncouragement() {
 
-function movePlayer(spaces) {
+  return encouragements[
+    Math.floor(
+      Math.random() *
+      encouragements.length
+    )
+  ];
 
+}
+
+
+/* ==============================
+   CELEBRATION
+============================== */
+
+function celebrateMovement(
+  oldPosition,
+  callback
+) {
+
+  let message =
+    randomEncouragement();
+
+
+  document.getElementById(
+    "encouragement"
+  ).innerHTML =
+    message;
+
+
+  buildCloseBoard();
+
+  starSound();
+
+
+  setTimeout(
+    () => {
+
+      buildFullBoard();
+
+      document.getElementById(
+        "fullMessage"
+      ).innerHTML =
+
+        message +
+        "<br>" +
+        "You're now on SPACE " +
+        boardPosition +
+        "!";
+
+
+      document.getElementById(
+        "fullBoardOverlay"
+      ).style.display =
+        "block";
+
+
+      checkPrize(
+        oldPosition,
+        boardPosition
+      );
+
+
+      setTimeout(
+        () => {
+
+          document.getElementById(
+            "fullBoardOverlay"
+          ).style.display =
+            "none";
+
+
+          buildCloseBoard();
+
+
+          if (callback) {
+            callback();
+          }
+
+        },
+        3000
+      );
+
+    },
+    600
+  );
+
+}
+
+
+/* ==============================
+   MOVE
+============================== */
+
+function movePlayer(
+  spaces,
+  callback
+) {
 
   let oldPosition =
     boardPosition;
@@ -908,96 +925,79 @@ function movePlayer(spaces) {
     boardPosition > 100
   ) {
 
-    boardPosition = 100;
+    boardPosition =
+      100;
 
   }
 
 
   saveBoard();
 
-  updateBoard();
-
-  checkPrize(
+  celebrateMovement(
     oldPosition,
-    boardPosition
+    callback
   );
 
 }
 
 
-
-/* =========================
+/* ==============================
    PRIZES
-========================= */
+============================== */
 
 function checkPrize(
   oldPosition,
   newPosition
 ) {
 
-
-  prizeSpaces.forEach(
-    prize => {
-
-
-      if (
-
-        oldPosition < prize
-        &&
+  let reachedPrize =
+    prizeSpaces.find(
+      prize =>
+        oldPosition < prize &&
         newPosition >= prize
+    );
 
-      ) {
 
+  if (reachedPrize) {
 
-        setTimeout(
-          () => {
+    prizeSound();
 
-            alert(
-              "🎁 YOU REACHED A PRIZE! 🎉\n\n" +
-              "Prize checkpoint " +
-              prize
-            );
+    document.getElementById(
+      "fullMessage"
+    ).innerHTML =
 
-          },
-          300
-        );
+      "🎁🎉 PRIZE CHECKPOINT! 🎉🎁" +
+      "<br>" +
+      "You reached SPACE " +
+      reachedPrize +
+      "!";
 
-      }
-
-    }
-  );
+  }
 
 
   if (
-
-    oldPosition < 100
-    &&
+    oldPosition < 100 &&
     newPosition >= 100
-
   ) {
 
+    prizeSound();
 
-    setTimeout(
-      () => {
+    document.getElementById(
+      "fullMessage"
+    ).innerHTML =
 
-        alert(
-          "🏰✨ YOU MADE IT TO THE CASTLE! ✨🏰\n\n" +
-          "YOU EARNED THE GRAND PRIZE!"
-        );
-
-      },
-      500
-    );
+      "🏰✨ GRAND PRIZE! ✨🏰" +
+      "<br>" +
+      "YOU MADE IT TO SPACE 100!";
 
   }
 
 }
 
 
-
-/* =========================
-   TODAY
-========================= */
+/* ==============================
+   DATE
+============================== */
 
 function today() {
 
@@ -1008,174 +1008,112 @@ function today() {
 }
 
 
-
-/* =========================
-   MORNING SAVE DATA
-========================= */
+/* ==============================
+   MORNING DATA
+============================== */
 
 let morningData =
   JSON.parse(
-
     localStorage.getItem(
       "adventureMorningData"
     )
-
   );
 
 
 if (
-
-  !morningData
-  ||
+  !morningData ||
   morningData.date !== today()
-
 ) {
 
-
   morningData = {
-
     date: today(),
-
     completed: [],
-
     diceRolled: false
-
   };
-
 
   saveMorning();
 
 }
 
 
-
 function saveMorning() {
 
   localStorage.setItem(
-
     "adventureMorningData",
-
     JSON.stringify(
       morningData
     )
-
   );
 
 }
 
 
-
-/* =========================
-   MORNING TASKS
-========================= */
+/* ==============================
+   TASKS
+============================== */
 
 const tasks = {
 
-
   modeh: {
-
-    emoji: "🙏",
-
-    text:
-      "Say Modeh Ani"
-
+    emoji:"🙏",
+    text:"Say Modeh Ani"
   },
-
 
   negel: {
-
-    emoji: "💧",
-
-    text:
-      "Wash Negel Vasser"
-
+    emoji:"💧",
+    text:"Wash Negel Vasser"
   },
-
 
   dressed: {
-
-    emoji: "👗",
-
-    text:
-      "Get dressed"
-
+    emoji:"👗",
+    text:"Get dressed"
   },
-
 
   bed: {
-
-    emoji: "🛏️",
-
-    text:
-      "Make your bed"
-
+    emoji:"🛏️",
+    text:"Make your bed"
   },
-
 
   teeth: {
-
-    emoji: "🪥",
-
-    text:
-      "Brush your teeth WITH toothpaste"
-
+    emoji:"🪥",
+    text:"Brush your teeth WITH toothpaste"
   },
 
-
   dishes: {
-
-    emoji: "🍽️",
-
-    text:
-      "Bring your breakfast dishes to the sink"
-
+    emoji:"🍽️",
+    text:"Bring your breakfast dishes to the sink"
   }
 
 };
 
 
-
-const middleTaskIds = [
-
-  "dressed",
-
-  "bed",
-
-  "teeth"
-
-];
+const middleTaskIds =
+  [
+    "dressed",
+    "bed",
+    "teeth"
+  ];
 
 
 let currentTaskId =
   null;
 
 
-
-/* =========================
+/* ==============================
    START MORNING
-========================= */
+============================== */
 
 function startMorning() {
 
-
   if (
-
-    morningData.date !==
-    today()
-
+    morningData.date !== today()
   ) {
 
-
     morningData = {
-
-      date: today(),
-
-      completed: [],
-
-      diceRolled: false
-
+      date:today(),
+      completed:[],
+      diceRolled:false
     };
-
 
     saveMorning();
 
@@ -1194,86 +1132,49 @@ function startMorning() {
     "block";
 
 
-  document.getElementById(
-    "starMessage"
-  ).innerHTML =
-    "";
-
-
   showNextMorningTask();
 
 }
 
 
-
-/* =========================
-   NEXT MORNING TASK
-========================= */
+/* ==============================
+   NEXT TASK
+============================== */
 
 function showNextMorningTask() {
 
-
   document.getElementById(
     "starMessage"
-  ).innerHTML =
-    "";
-
-
-  /* MODEH ANI FIRST */
+  ).innerHTML = "";
 
 
   if (
-
     !morningData.completed
       .includes("modeh")
-
   ) {
 
-
-    showTask(
-      "modeh"
-    );
-
+    showTask("modeh");
     return;
 
   }
-
-
-
-  /* NEGEL VASSER SECOND */
 
 
   if (
-
     !morningData.completed
       .includes("negel")
-
   ) {
 
-
-    showTask(
-      "negel"
-    );
-
+    showTask("negel");
     return;
 
   }
-
-
-
-  /* RANDOM MIDDLE TASKS */
 
 
   let unfinishedMiddle =
-
     middleTaskIds.filter(
-
       id =>
-
-        !morningData
-          .completed
+        !morningData.completed
           .includes(id)
-
     );
 
 
@@ -1281,52 +1182,33 @@ function showNextMorningTask() {
     unfinishedMiddle.length > 0
   ) {
 
-
     let randomIndex =
-
       Math.floor(
-
-        Math.random()
-        *
+        Math.random() *
         unfinishedMiddle.length
-
       );
 
 
     showTask(
-
       unfinishedMiddle[
         randomIndex
       ]
-
     );
-
 
     return;
 
   }
-
-
-
-  /* BREAKFAST DISHES */
 
 
   if (
-
     !morningData.completed
       .includes("dishes")
-
   ) {
 
-
-    showTask(
-      "dishes"
-    );
-
+    showTask("dishes");
     return;
 
   }
-
 
 
   finishMorning();
@@ -1334,21 +1216,17 @@ function showNextMorningTask() {
 }
 
 
-
-/* =========================
+/* ==============================
    SHOW TASK
-========================= */
+============================== */
 
-function showTask(
-  taskId
-) {
-
+function showTask(taskId) {
 
   currentTaskId =
     taskId;
 
 
-  const task =
+  let task =
     tasks[taskId];
 
 
@@ -1378,34 +1256,22 @@ function showTask(
 }
 
 
-
-/* =========================
+/* ==============================
    COMPLETE TASK
-========================= */
+============================== */
 
 function completeTask() {
 
-
-  if (
-    !currentTaskId
-  ) {
-
+  if (!currentTaskId) {
     return;
-
   }
 
 
   if (
-
     morningData.completed
-      .includes(
-        currentTaskId
-      )
-
+      .includes(currentTaskId)
   ) {
-
     return;
-
   }
 
 
@@ -1417,43 +1283,29 @@ function completeTask() {
   saveMorning();
 
 
-  /* STAR = ONE SPACE */
-
-
-  movePlayer(1);
-
-
   document.getElementById(
     "starMessage"
   ).innerHTML =
-
-    "⭐ STAR EARNED! ⭐" +
-    "<br>" +
-    "Your piece moved forward!";
+    "⭐ STAR EARNED! ⭐";
 
 
   currentTaskId =
     null;
 
 
-  setTimeout(
-
-    showNextMorningTask,
-
-    1000
-
+  movePlayer(
+    1,
+    showNextMorningTask
   );
 
 }
 
 
-
-/* =========================
+/* ==============================
    FINISH MORNING
-========================= */
+============================== */
 
 function finishMorning() {
-
 
   currentTaskId =
     null;
@@ -1468,8 +1320,7 @@ function finishMorning() {
   document.getElementById(
     "missionText"
   ).innerHTML =
-
-    "You finished ALL your morning missions!";
+    "MORNING MISSION COMPLETE!";
 
 
   document.getElementById(
@@ -1478,16 +1329,15 @@ function finishMorning() {
     "none";
 
 
+  document.getElementById(
+    "diceArea"
+  ).style.display =
+    "block";
+
+
   if (
     !morningData.diceRolled
   ) {
-
-
-    document.getElementById(
-      "diceArea"
-    ).style.display =
-      "block";
-
 
     document.getElementById(
       "diceButton"
@@ -1502,15 +1352,7 @@ function finishMorning() {
 
   }
 
-
   else {
-
-
-    document.getElementById(
-      "diceArea"
-    ).style.display =
-      "block";
-
 
     document.getElementById(
       "diceButton"
@@ -1521,35 +1363,32 @@ function finishMorning() {
     document.getElementById(
       "diceResult"
     ).innerHTML =
-
-      "✅ Today's bonus roll has already been used!";
+      "✅ Bonus roll already used today!";
 
   }
 
 }
 
 
-
-/* =========================
-   BONUS DICE
-========================= */
+/* ==============================
+   DICE
+============================== */
 
 function rollDice() {
-
 
   if (
     morningData.diceRolled
   ) {
-
     return;
-
   }
 
 
-  let roll =
+  diceSound();
 
+
+  let roll =
     Math.floor(
-      Math.random() * 6
+      Math.random()*6
     ) + 1;
 
 
@@ -1558,11 +1397,6 @@ function rollDice() {
 
 
   saveMorning();
-
-
-  movePlayer(
-    roll
-  );
 
 
   document.getElementById(
@@ -1576,29 +1410,24 @@ function rollDice() {
   ).innerHTML =
 
     "🎲 You rolled a " +
-
     "<strong>" +
     roll +
-    "</strong>!" +
+    "</strong>!";
 
-    "<br><br>" +
 
-    "Your game piece zoomed forward " +
-
-    roll +
-
-    " extra spaces! 🎉";
+  movePlayer(
+    roll,
+    null
+  );
 
 }
 
 
-
-/* =========================
+/* ==============================
    HOME
-========================= */
+============================== */
 
 function goHome() {
-
 
   document.getElementById(
     "missionScreen"
@@ -1612,16 +1441,14 @@ function goHome() {
     "block";
 
 
-  updateBoard();
+  buildCloseBoard();
 
 }
 
 
-
 /* START */
 
-buildBoard();
-
+buildCloseBoard();
 
 </script>
 
