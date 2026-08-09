@@ -466,12 +466,7 @@ function getAudio() {
 
   }
 
-  if (audioContext.state === "suspended") {
-    audioContext.resume();
-  }
-
   return audioContext;
-}
 }
 
 
