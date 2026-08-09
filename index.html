@@ -286,6 +286,37 @@ button {
     font-size: 9px;
   }
 }
+
+/* ===== THEMED ADVENTURE WORLDS ===== */
+#closeBoardCard { position:relative; overflow:hidden; border:3px solid rgba(255,255,255,.85); transition:.35s; }
+#closeBoardCard::before,#closeBoardCard::after { position:absolute; pointer-events:none; z-index:0; font-size:34px; opacity:.9; }
+#closeBoardCard::before { left:12px; top:48px; } #closeBoardCard::after { right:12px; bottom:10px; }
+#closeBoardCard > * { position:relative; z-index:1; }
+#worldBanner { font-size:23px; font-weight:800; margin:4px 0 2px; }
+#worldTagline { font-size:14px; font-weight:700; margin-bottom:10px; }
+.world-rainbow { background:linear-gradient(145deg,#dff9ff,#e7ffe7,#fff4bd)!important; }
+.world-rainbow::before{content:"🌈 ☁️";}.world-rainbow::after{content:"🦋 🌼";}
+.world-candy { background:linear-gradient(145deg,#fff0f7,#ffe4f2,#fff4c7)!important; }
+.world-candy::before{content:"🍭 🍬";}.world-candy::after{content:"🧁 🍩";}
+.world-ocean { background:linear-gradient(145deg,#d9fbff,#cceeff,#d8fff2)!important; }
+.world-ocean::before{content:"🐠 🫧";}.world-ocean::after{content:"🐚 🐬";}
+.world-forest { background:linear-gradient(145deg,#e6ffe1,#f4ffd8,#e4f4ff)!important; }
+.world-forest::before{content:"🌳 ✨";}.world-forest::after{content:"🦄 🍄";}
+.world-space { background:linear-gradient(145deg,#e8e3ff,#d9e8ff,#f2e6ff)!important; }
+.world-space::before{content:"🚀 ⭐";}.world-space::after{content:"🪐 🌙";}
+.world-garden { background:linear-gradient(145deg,#ffe9f2,#f4e7ff,#e5fff1)!important; }
+.world-garden::before{content:"👑 🌸";}.world-garden::after{content:"🏰 🌷";}
+.world-treasure { background:linear-gradient(145deg,#fff2c9,#e9f9d8,#dff5ff)!important; }
+.world-treasure::before{content:"🏝️ 🗺️";}.world-treasure::after{content:"💎 🪙";}
+.world-castle { background:linear-gradient(145deg,#ffe3f3,#efe0ff,#fff0b8)!important; }
+.world-castle::before{content:"✨ 🏰";}.world-castle::after{content:"🏆 🎉";}
+.fullSpace.world-rainbow-mini{background:#c8f4e8!important}.fullSpace.world-candy-mini{background:#ffd6e8!important}
+.fullSpace.world-ocean-mini{background:#ccecff!important}.fullSpace.world-forest-mini{background:#d9f4c9!important}
+.fullSpace.world-space-mini{background:#dcd4ff!important}.fullSpace.world-garden-mini{background:#f3d9ff!important}
+.fullSpace.world-treasure-mini{background:#ffe5a8!important}.fullSpace.world-castle-mini{background:#ffd5ef!important}
+.worldPrize{outline:3px solid #ffd700;box-shadow:0 0 12px rgba(255,190,0,.7)}
+@media(max-width:600px){#worldBanner{font-size:19px}#worldTagline{font-size:12px}#closeBoardCard::before,#closeBoardCard::after{font-size:25px;opacity:.72}}
+
 </style>
 </head>
 
@@ -319,6 +350,8 @@ Complete missions • Earn stars • Reach the castle!
 
   <h2>🎲 Your Adventure</h2>
 
+  <div id="worldBanner"></div>
+  <div id="worldTagline"></div>
   <div id="sectionTitle"></div>
 
   <div id="closeBoard"></div>
@@ -557,6 +590,32 @@ function saveBoard() {
 }
 
 
+
+/* ==============================
+   ADVENTURE WORLDS
+============================== */
+const adventureWorlds = [
+ {start:1,end:14,name:"Rainbow Meadow",emoji:"🌈",className:"world-rainbow",mini:"world-rainbow-mini",tagline:"Follow the rainbow through clouds, flowers and butterflies!"},
+ {start:15,end:28,name:"Candy Kingdom",emoji:"🍭",className:"world-candy",mini:"world-candy-mini",tagline:"A sweet land of lollipops, cupcakes and candy surprises!"},
+ {start:29,end:42,name:"Under-the-Sea Adventure",emoji:"🐠",className:"world-ocean",mini:"world-ocean-mini",tagline:"Swim past bubbles, shells and friendly sea creatures!"},
+ {start:43,end:56,name:"Enchanted Forest",emoji:"🦄",className:"world-forest",mini:"world-forest-mini",tagline:"Explore a magical forest filled with sparkles and surprises!"},
+ {start:57,end:70,name:"Space Adventure",emoji:"🚀",className:"world-space",mini:"world-space-mini",tagline:"Blast off past stars, planets and the moon!"},
+ {start:71,end:84,name:"Castle Gardens",emoji:"👑",className:"world-garden",mini:"world-garden-mini",tagline:"Travel through royal gardens on the road to the castle!"},
+ {start:85,end:98,name:"Treasure Island",emoji:"🏝️",className:"world-treasure",mini:"world-treasure-mini",tagline:"Follow the treasure map toward the final prize!"},
+ {start:99,end:100,name:"Grand Prize Castle",emoji:"🏰",className:"world-castle",mini:"world-castle-mini",tagline:"The castle is here — the GRAND PRIZE is just ahead!"}
+];
+function getAdventureWorld(position){
+ return adventureWorlds.find(w=>position>=w.start&&position<=w.end)||adventureWorlds[0];
+}
+function applyAdventureWorld(){
+ const w=getAdventureWorld(Math.max(1,boardPosition));
+ const card=document.getElementById("closeBoardCard");
+ adventureWorlds.forEach(x=>card.classList.remove(x.className));
+ card.classList.add(w.className);
+ document.getElementById("worldBanner").textContent=w.emoji+" "+w.name+" "+w.emoji;
+ document.getElementById("worldTagline").textContent=w.tagline;
+}
+
 /* ==============================
    CLOSE-UP BOARD
 ============================== */
@@ -577,6 +636,8 @@ function getSectionStart() {
 
 
 function buildCloseBoard() {
+
+  applyAdventureWorld();
 
   const board =
     document.getElementById(
@@ -745,7 +806,12 @@ function buildFullBoard() {
 
     space.className =
       "fullSpace c" +
-      colour;
+      colour + " " +
+      getAdventureWorld(number).mini;
+
+    if (prizeSpaces.includes(number) || number === 100) {
+      space.classList.add("worldPrize");
+    }
 
 
     if (
