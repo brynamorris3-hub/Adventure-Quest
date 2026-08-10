@@ -317,6 +317,49 @@ button {
 .worldPrize{outline:3px solid #ffd700;box-shadow:0 0 12px rgba(255,190,0,.7)}
 @media(max-width:600px){#worldBanner{font-size:19px}#worldTagline{font-size:12px}#closeBoardCard::before,#closeBoardCard::after{font-size:25px;opacity:.72}}
 
+/* ===== FRIENDLY UNDO / CORRECTIONS ===== */
+#undoArea {
+  margin-top: 14px;
+  padding: 12px;
+  border-radius: 18px;
+  background: #fff8d9;
+  border: 2px solid #f2d36b;
+}
+
+#undoButton {
+  background: #ffd98a;
+  font-size: 17px;
+  padding: 11px 16px;
+}
+
+#completedToday {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 2px dashed rgba(0,0,0,.12);
+}
+
+#completedTodayTitle {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.completedTaskButton {
+  display: block;
+  width: 100%;
+  max-width: 430px;
+  margin: 7px auto;
+  padding: 10px 12px;
+  font-size: 15px;
+  background: #e7f8ea;
+}
+
+#correctionMessage {
+  min-height: 28px;
+  margin-top: 8px;
+  font-weight: bold;
+  font-size: 16px;
+}
+
 
 /* ===== Adventure board upgrade ===== */
 #closeBoard {
@@ -511,6 +554,19 @@ Complete missions • Earn stars • Reach the castle!
       ✓
 
     </button>
+
+    <div id="undoArea">
+      <button id="undoButton" onclick="undoLastTask()" style="display:none;">
+        ↩ Undo last task
+      </button>
+
+      <div id="correctionMessage"></div>
+
+      <div id="completedToday">
+        <div id="completedTodayTitle">✅ Completed today</div>
+        <div id="completedTaskList"></div>
+      </div>
+    </div>
 
     <div id="diceArea">
 
@@ -1198,7 +1254,9 @@ if (
   morningData = {
     date: today(),
     completed: [],
-    diceRolled: false
+    completionOrder: [],
+    diceRolled: false,
+    diceRollValue: 0
   };
 
   saveMorning();
@@ -1216,6 +1274,15 @@ function saveMorning() {
   );
 
 }
+
+/* Keep older saved data compatible with the new undo feature. */
+if (!Array.isArray(morningData.completionOrder)) {
+  morningData.completionOrder = [...morningData.completed];
+}
+if (typeof morningData.diceRollValue !== "number") {
+  morningData.diceRollValue = 0;
+}
+saveMorning();
 
 
 /* ==============================
@@ -1270,6 +1337,81 @@ let currentTaskId =
 
 
 /* ==============================
+   FRIENDLY UNDO / CORRECTIONS
+============================== */
+
+function renderCompletedTasks() {
+  const list = document.getElementById("completedTaskList");
+  const undoButton = document.getElementById("undoButton");
+
+  if (!list || !undoButton) return;
+
+  const completed = morningData.completed || [];
+  const order = morningData.completionOrder || [];
+
+  if (completed.length === 0) {
+    list.innerHTML = "<div style='font-size:14px;'>Nothing completed yet.</div>";
+    undoButton.style.display = "none";
+    return;
+  }
+
+  undoButton.style.display = order.length > 0 ? "inline-block" : "none";
+
+  list.innerHTML = completed.map(id => {
+    const task = tasks[id];
+    if (!task) return "";
+    return (
+      "<button class='completedTaskButton' onclick=\"undoTask('" + id + "')\">" +
+      "✓ " + task.emoji + " " + task.text + " &nbsp;—&nbsp; Undo" +
+      "</button>"
+    );
+  }).join("");
+}
+
+function undoLastTask() {
+  const order = morningData.completionOrder || [];
+  if (order.length === 0) return;
+  undoTask(order[order.length - 1]);
+}
+
+function undoTask(taskId) {
+  if (!morningData.completed.includes(taskId)) return;
+
+  /* If a bonus roll was earned after the routine was completed,
+     reverse it too when we know the roll value. */
+  let spacesToReverse = 1;
+
+  if (morningData.diceRolled && morningData.diceRollValue > 0) {
+    spacesToReverse += morningData.diceRollValue;
+    morningData.diceRolled = false;
+    morningData.diceRollValue = 0;
+  }
+
+  morningData.completed =
+    morningData.completed.filter(id => id !== taskId);
+
+  morningData.completionOrder =
+    (morningData.completionOrder || []).filter(id => id !== taskId);
+
+  boardPosition = Math.max(0, boardPosition - spacesToReverse);
+
+  saveMorning();
+  saveBoard();
+
+  currentTaskId = taskId;
+
+  document.getElementById("diceArea").style.display = "none";
+  document.getElementById("correctionMessage").innerHTML =
+    "↩️ Corrected! <strong>" + tasks[taskId].text +
+    "</strong> is not completed yet.";
+
+  buildCloseBoard();
+  showTask(taskId);
+  renderCompletedTasks();
+}
+
+
+/* ==============================
    START MORNING
 ============================== */
 
@@ -1282,7 +1424,9 @@ function startMorning() {
     morningData = {
       date:today(),
       completed:[],
-      diceRolled:false
+      completionOrder:[],
+      diceRolled:false,
+      diceRollValue:0
     };
 
     saveMorning();
@@ -1303,6 +1447,7 @@ function startMorning() {
 
 
   showNextMorningTask();
+  renderCompletedTasks();
 
 }
 
@@ -1423,6 +1568,8 @@ function showTask(taskId) {
   ).style.display =
     "none";
 
+  renderCompletedTasks();
+
 }
 
 
@@ -1449,6 +1596,14 @@ function completeTask() {
     currentTaskId
   );
 
+  if (!Array.isArray(morningData.completionOrder)) {
+    morningData.completionOrder = [];
+  }
+
+  morningData.completionOrder.push(
+    currentTaskId
+  );
+
 
   saveMorning();
 
@@ -1457,6 +1612,12 @@ function completeTask() {
     "starMessage"
   ).innerHTML =
     "⭐ STAR EARNED! ⭐";
+
+  document.getElementById(
+    "correctionMessage"
+  ).innerHTML = "";
+
+  renderCompletedTasks();
 
 
   currentTaskId =
@@ -1479,6 +1640,8 @@ function finishMorning() {
 
   currentTaskId =
     null;
+
+  renderCompletedTasks();
 
 
   document.getElementById(
@@ -1565,6 +1728,9 @@ function rollDice() {
   morningData.diceRolled =
     true;
 
+  morningData.diceRollValue =
+    roll;
+
 
   saveMorning();
 
@@ -1619,6 +1785,7 @@ function goHome() {
 /* START */
 
 buildCloseBoard();
+renderCompletedTasks();
 
 </script>
 
